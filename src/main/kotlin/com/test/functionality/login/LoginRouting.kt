@@ -23,13 +23,13 @@ fun Application.configureLogin() {
                 val principal = call.principal<UserIdPrincipal>() ?: error("Invalid credentials")
 
                 val token = (CreateJWT(JWTConfig("dustyns web app","https://jwt-provider-domain/","secret","dustyn",700000)))
-                call.respond(mapOf("token" to token))
+                call.respond(mapOf("acces_token" to token))
             }
             post("/app/signup") {
                 val principal = call.principal<UserIdPrincipal>() ?: error("Invalid credentials")
 
                 val token = (CreateJWT(JWTConfig("dustyns web app","https://jwt-provider-domain/","secret","dustyn",700000)))
-                call.respond(mapOf("token" to token))
+                call.respond(mapOf("acces_token" to token))
             }
 
         }

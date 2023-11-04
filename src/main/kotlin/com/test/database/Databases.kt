@@ -27,7 +27,7 @@ fun Application.configureDatabase() {
 
     val url = "jdbc:postgresql://localhost:5432/keystore" //environment.config.property("postgres.url").getString()
     val user = "postgres"// environment.config.property("postgres.user").getString()
-    val password = "fdsa" //environment.config.property("postgres.password").getString()
+    val password = "password" //environment.config.property("postgres.password").getString()
 
     try {
         Database.connect(url, driver="org.postgresql.Driver", user = user,password = password )
