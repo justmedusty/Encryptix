@@ -11,6 +11,7 @@ import kotlinx.coroutines.selects.select
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.mindrot.jbcrypt.BCrypt
 
 object Users : Table(name = "public.'Users'") {
     val id: Column<Int> = integer("id").autoIncrement()
@@ -101,12 +102,12 @@ fun publicKeyAlreadyExists(publicKey: String): Boolean {
             .count() > 0
     }
 }
+
+//this was a major pain in the cock to get the hashing to work
 fun verifyCredentials(userName: String,password: String): Boolean{
-    val hashedPassword = hashPassword(password)
-    println(hashedPassword + "==============================================================================================================")
     return transaction {
         val user = Users.select { Users.userName eq userName }.singleOrNull()
-        user != null && user[Users.passwordHash] == hashedPassword
+        user != null && BCrypt.checkpw(password,user[Users.passwordHash],)
 
     }
 }

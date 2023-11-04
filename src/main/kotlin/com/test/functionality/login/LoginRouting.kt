@@ -14,7 +14,9 @@ import kotlin.math.sign
 
 
 // Function to hash and salt the password
-fun hashPassword(password: String): String = BCrypt.hashpw(password, BCrypt.gensalt())
+fun hashPassword(password: String): String {
+    return BCrypt.hashpw(password,BCrypt.gensalt())
+}
 data class Signup(val userName: String,  val password: String)
 fun Application.configureLogin() {
 
