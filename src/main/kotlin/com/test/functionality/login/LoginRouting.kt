@@ -11,14 +11,14 @@ import org.mindrot.jbcrypt.BCrypt
 // Function to hash and salt the password
 fun hashPassword(password: String): String = BCrypt.hashpw(password, BCrypt.gensalt())
 
-fun Application.module() {
+fun Application.configureLogin() {
 
 
     // Route for user login with Basic Auth
 
 
     routing {
-        authenticate("basicAuth") {
+        authenticate("basic") {
             post("/app/login") {
                 val principal = call.principal<UserIdPrincipal>() ?: error("Invalid credentials")
 
@@ -34,4 +34,5 @@ fun Application.module() {
 
         }
     }
+
 }
