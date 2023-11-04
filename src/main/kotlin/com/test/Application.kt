@@ -1,6 +1,6 @@
 package com.test
 
-import com.test.database.configureDatabases
+//import com.test.database.configureDatabases
 import com.test.security.configureSecurity
 import com.test.resources.configureHTTP
 import com.test.resources.configureRouting
@@ -21,6 +21,6 @@ fun Application.module() {
     configureSecurity()
     configureHTTP()
     configureSerialization()
-    configureDatabases()
+   // configureDatabases()
     configureRouting()
 }
