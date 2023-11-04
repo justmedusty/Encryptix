@@ -29,10 +29,10 @@ data class User(
 )
 
 fun Application.configureDatabase() {
-
-    val url = "jdbc:postgresql://localhost:5432/keystore" //environment.config.property("postgres.url").getString()
-    val user = "postgres"// environment.config.property("postgres.user").getString()
-    val password = "password" //environment.config.property("postgres.password").getString()
+    //this should be grabbed from an env variable hidden away but right now i dont care
+    val url = System.getenv("POSTGRES_URL") //environment.config.property("postgres.url").getString()
+    val user = System.getenv("POSTGRES_USER")// environment.config.property("postgres.user").getString()
+    val password = System.getenv("POSTGRES_PASSWORD")//environment.config.property("postgres.password").getString()
 
     try {
         Database.connect(url, driver="org.postgresql.Driver", user = user,password = password )
@@ -44,6 +44,7 @@ fun Application.configureDatabase() {
 
     transaction {
         SchemaUtils.create(Users)
+        //dont really need this but fuck it for now
         addLogger(StdOutSqlLogger)
     }
 }
@@ -62,7 +63,6 @@ fun createUser(user: User) {
             it[userName] = user.userName
             it[passwordHash] = hashPassword(user.passwordHash)
         } get Users.id
-        println(hashPassword(user.passwordHash)+ "================================================================================================================================================")
     }
 }
 

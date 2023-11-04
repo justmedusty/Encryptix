@@ -27,8 +27,9 @@ fun Application.configureLogin() {
     routing {
         authenticate("basic") {
             post("/app/login") {
-
-                val token = (CreateJWT(JWTConfig("dustyns web app","https://jwt-provider-domain/","secret","dustyn",700000)))
+                val principal = call.principal<UserIdPrincipal>() ?: error("Invalid credentials")
+                val userName = principal.name
+                val token = (CreateJWT(JWTConfig("dustyns web app","https://jwt-provider-domain/",System.getenv("JWT_SECRET"),userName,700000)))
                 call.respond(mapOf("access_token" to token))
             }
 
