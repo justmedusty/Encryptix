@@ -7,8 +7,18 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import java.sql.*
 import kotlinx.coroutines.*
+import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.Table
 
-fun Application.configureDatabases() {
+object Users : Table() {
+    val id: Column<Int> = integer("id")
+    val user_name: Column<String> = varchar("user_name",45)
+    val publicKey: Column<String> = varchar("public_key",45)
+    val passwordHash = text("password_hash")
+
+    override val primaryKey = PrimaryKey(id)
+}
+/**fun Application.configureDatabases() {
     val dbConnection: Connection = connectToPostgres(embedded = true)
     val cityService = CityService(dbConnection)
     routing {
@@ -43,7 +53,7 @@ fun Application.configureDatabases() {
         }
     }
 }
-
+**/
 /**
  * Makes a connection to a Postgres database.
  *

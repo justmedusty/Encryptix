@@ -2,9 +2,14 @@ package com.test.security
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
+import com.test.database.Users
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.transactions.transaction
+import org.mindrot.jbcrypt.BCrypt
 import java.util.Date
 
 fun Application.configureSecurity() {
@@ -28,6 +33,26 @@ fun Application.configureSecurity() {
             }
         }
     }
+    install(Authentication) {
+        basic("basicAuth") {
+            realm = "Ktor Server"
+            validate { credentials ->
+                val username = credentials.name
+
+                val salt = BCrypt.gensalt(12)
+                val password = BCrypt.hashpw(credentials.password,salt)
+
+                val user = transaction {
+                    Users.select { Users.user_name eq username }.singleOrNull()
+                }
+
+                if (user != null && BCrypt.checkpw(password, user[Users.passwordHash])) {
+                    UserIdPrincipal(username)
+                } else null
+            }
+        }
+    }
+
 }
 
 data class JWTConfig(
