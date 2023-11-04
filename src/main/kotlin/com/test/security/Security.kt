@@ -2,6 +2,8 @@ package com.test.security
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
+import com.test.database.verifyCredentials
+import com.test.functionality.login.hashPassword
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
@@ -33,7 +35,7 @@ fun Application.configureSecurity() {
         basic(name = "basic") {
             realm = "Ktor Server"
             validate { credentials ->
-                if (credentials.name == credentials.password) {
+                if (verifyCredentials(credentials.name, credentials.password)) {
                     UserIdPrincipal(credentials.name)
                 } else {
                     null
