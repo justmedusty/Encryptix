@@ -22,7 +22,7 @@ fun Application.module() {
     configureSecurity()
     configureHTTP()
     configureSerialization()
-    //configureDatabase()
+    configureDatabase()
     configureRouting()
     configureLogin()
 }
