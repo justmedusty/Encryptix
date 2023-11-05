@@ -105,24 +105,21 @@ fun updatePublicKey(userName: String,newPublicKey : String): Boolean {
 }
 
 fun updateUserCredentials(userName: String, password: String, newValue: String) {
-    when {
-        password.isNullOrEmpty() && !newValue.isNullOrEmpty()  -> {
-            transaction {
+    transaction {
+        when {
+            password.isEmpty() && newValue.isNotEmpty() -> {
                 Users.update({ Users.userName eq userName }) {
                     it[Users.userName] = newValue
                 }
-                return@transaction
             }
-        }
-        !password.isNullOrEmpty() -> {
-            transaction {
+            password.isNotEmpty() && newValue.isNotEmpty() -> {
                 Users.update({ Users.userName eq userName }) {
                     it[passwordHash] = hashPassword(newValue)
                 }
             }
-        }
-        else -> {
-            throw IllegalArgumentException("An error occurred during the update")
+            else -> {
+                throw IllegalArgumentException("An error occurred during the update")
+            }
         }
     }
 }
@@ -150,7 +147,7 @@ fun publicKeyAlreadyExists(publicKey: String): Boolean {
 fun verifyCredentials(userName: String,password: String): Boolean{
     return transaction {
         val user = Users.select { Users.userName eq userName }.singleOrNull()
-        user != null && BCrypt.checkpw(password,user[Users.passwordHash],)
+        user != null && BCrypt.checkpw(password,user[Users.passwordHash])
 
     }
 }

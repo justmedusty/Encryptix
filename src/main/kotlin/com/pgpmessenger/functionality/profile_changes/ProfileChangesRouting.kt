@@ -40,7 +40,6 @@ fun Application.configureProfileChangeRoutes(){
                 val newUserName = postParams["newUser"] ?: error("No new value provided")
                 val principal = call.principal<JWTPrincipal>()
                 val id = principal?.payload?.subject
-                val token = call.request.cookies["jwt"]?: call.request.headers["Authorization"]?.removePrefix("Bearer ")
 
                 if (newUserName.isNullOrEmpty() || !userAndPasswordValidation(newUserName,"")) {
                     call.respond(HttpStatusCode.BadRequest, mapOf("Response" to "Please provide a valid username. Must be between 6 and 45 characters and be unique"))
@@ -48,6 +47,23 @@ fun Application.configureProfileChangeRoutes(){
                     try {
                         updateUserCredentials(getUserName(id).toString(), "", newUserName)
                         call.respond(HttpStatusCode.OK, mapOf("Response" to "Username updated successfully"))
+                    } catch (e: IllegalArgumentException) {
+                        call.respond(HttpStatusCode.BadRequest, mapOf("Response" to e.message))
+                    }
+                }
+            }
+            post("/app/changePassword") {
+                val postParams = call.receiveParameters()
+                val newPassword = postParams["newPassword"] ?: error("No new value provided")
+                val principal = call.principal<JWTPrincipal>()
+                val id = principal?.payload?.subject
+
+                if (newPassword.isNullOrEmpty() || !userAndPasswordValidation("",newPassword)) {
+                    call.respond(HttpStatusCode.BadRequest, mapOf("Response" to "Please provide a valid password. Must be at least 8 characters"))
+                } else {
+                    try {
+                        updateUserCredentials(getUserName(id).toString(),"this is scuffed i know but for now i dont care" , newPassword)
+                        call.respond(HttpStatusCode.OK, mapOf("Response" to "Password updated successfully"))
                     } catch (e: IllegalArgumentException) {
                         call.respond(HttpStatusCode.BadRequest, mapOf("Response" to e.message))
                     }
