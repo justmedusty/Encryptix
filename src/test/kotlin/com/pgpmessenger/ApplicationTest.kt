@@ -16,6 +16,7 @@ class ApplicationTest {
     @Test
     fun testRoot() = testApplication {
         application {
+            //this doesnt work because of the way the jwt secret is setup but if you take this out it wont build so just leave it goddamn it
             configureSecurity()
             configureRouting()
         }
