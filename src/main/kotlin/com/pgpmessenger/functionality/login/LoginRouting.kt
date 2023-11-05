@@ -1,16 +1,15 @@
-package com.test.functionality.login
-import com.test.database.User
-import com.test.database.createUser
-import com.test.database.userNameAlreadyExists
-import com.test.security.CreateJWT
-import com.test.security.JWTConfig
+package com.pgpmessenger.functionality.login
+import com.pgpmessenger.database.User
+import com.pgpmessenger.database.createUser
+import com.pgpmessenger.database.userNameAlreadyExists
+import com.pgpmessenger.security.CreateJWT
+import com.pgpmessenger.security.JWTConfig
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.mindrot.jbcrypt.BCrypt
-import kotlin.math.sign
 
 
 // Function to hash and salt the password

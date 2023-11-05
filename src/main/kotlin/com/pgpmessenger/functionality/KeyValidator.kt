@@ -1,4 +1,4 @@
-package com.test.functionality
+package com.pgpmessenger.functionality
 
 
 

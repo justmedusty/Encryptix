@@ -1,8 +1,7 @@
-package com.test.functionality.profile_changes
+package com.pgpmessenger.functionality.profile_changes
 
-import com.test.database.User
-import com.test.database.updatePublicKey
-import com.test.functionality.isValidOpenPGPPublicKey
+import com.pgpmessenger.database.updatePublicKey
+import com.pgpmessenger.functionality.isValidOpenPGPPublicKey
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*

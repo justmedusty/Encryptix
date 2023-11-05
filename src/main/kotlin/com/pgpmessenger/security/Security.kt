@@ -1,9 +1,8 @@
-package com.test.security
+package com.pgpmessenger.security
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
-import com.test.database.verifyCredentials
-import com.test.functionality.login.hashPassword
+import com.pgpmessenger.database.verifyCredentials
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*

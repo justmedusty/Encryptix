@@ -1,4 +1,4 @@
-package com.test.functionality
+package com.pgpmessenger.functionality
 
 import com.fasterxml.jackson.databind.*
 import io.ktor.serialization.jackson.*

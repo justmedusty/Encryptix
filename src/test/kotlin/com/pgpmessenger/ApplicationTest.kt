@@ -1,6 +1,6 @@
-package com.test
+package com.pgpmessenger
 
-import com.test.resources.configureRouting
+import com.pgpmessenger.resources.configureRouting
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*

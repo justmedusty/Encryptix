@@ -1,8 +1,6 @@
-package com.test.security
+package com.pgpmessenger.security
 
 import io.ktor.http.*
-import io.ktor.server.engine.*
-import io.ktor.server.netty.*
 import java.security.KeyStore
 import java.io.File
 import java.io.FileInputStream

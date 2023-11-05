@@ -1,7 +1,7 @@
-package com.test.resources
+package com.pgpmessenger.resources
 
-import com.test.security.CreateJWT
-import com.test.security.JWTConfig
+import com.pgpmessenger.security.CreateJWT
+import com.pgpmessenger.security.JWTConfig
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
