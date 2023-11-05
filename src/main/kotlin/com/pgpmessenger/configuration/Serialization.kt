@@ -1,4 +1,4 @@
-package com.pgpmessenger.functionality
+package com.pgpmessenger.configuration
 
 import com.fasterxml.jackson.databind.*
 import io.ktor.serialization.jackson.*
@@ -14,13 +14,5 @@ fun Application.configureSerialization() {
             enable(SerializationFeature.INDENT_OUTPUT)
         }
         json()
-    }
-    routing {
-        get("/json/jackson") {
-            call.respond(mapOf("hello" to "world"))
-        }
-        get("/json/kotlinx-serialization") {
-            call.respond(mapOf("hello" to "world"))
-        }
     }
 }

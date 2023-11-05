@@ -2,9 +2,9 @@ package com.pgpmessenger
 
 import com.pgpmessenger.database.configureDatabase
 import com.pgpmessenger.security.configureSecurity
-import com.pgpmessenger.resources.configureHTTP
-import com.pgpmessenger.resources.configureRouting
-import com.pgpmessenger.functionality.configureSerialization
+import com.pgpmessenger.configuration.configureHTTP
+import com.pgpmessenger.configuration.configureRouting
+import com.pgpmessenger.configuration.configureSerialization
 import com.pgpmessenger.functionality.login.configureLogin
 import com.pgpmessenger.functionality.profile_changes.configureProfileChangeRoutes
 import io.ktor.server.application.*

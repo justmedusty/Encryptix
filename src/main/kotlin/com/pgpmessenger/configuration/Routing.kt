@@ -1,4 +1,4 @@
-package com.pgpmessenger.resources
+package com.pgpmessenger.configuration
 
 import com.pgpmessenger.security.CreateJWT
 import com.pgpmessenger.security.JWTConfig

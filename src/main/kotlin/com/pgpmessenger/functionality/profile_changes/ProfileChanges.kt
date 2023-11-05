@@ -18,7 +18,7 @@ fun Application.configureProfileChangeRoutes(){
                 val postParams = call.receiveParameters()
                 val key = postParams["publicKey"] ?: error("No key provided")
                 if(key==null){
-                    call.respond(HttpStatusCode.Conflict,"Please Upload A Key")
+                    call.respond(HttpStatusCode.Conflict,mapOf("Response" to "Please Upload A Key" ))
                 }
                 val principal = call.principal<JWTPrincipal>()
                 val username = principal?.payload?.subject.toString()

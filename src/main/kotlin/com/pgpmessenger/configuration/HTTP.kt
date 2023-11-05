@@ -1,4 +1,4 @@
-package com.pgpmessenger.resources
+package com.pgpmessenger.configuration
 
 import io.ktor.server.application.*
 import io.ktor.server.plugins.openapi.*
