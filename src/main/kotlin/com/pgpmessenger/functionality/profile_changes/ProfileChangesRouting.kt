@@ -35,7 +35,7 @@ fun Application.configureProfileChangeRoutes(){
                     }
                 }
             }
-            post("/app/changeUserName") {
+            post("/app/profile/changeUserName") {
                 val postParams = call.receiveParameters()
                 val newUserName = postParams["newUser"] ?: error("No new value provided")
                 val principal = call.principal<JWTPrincipal>()
@@ -52,7 +52,7 @@ fun Application.configureProfileChangeRoutes(){
                     }
                 }
             }
-            post("/app/changePassword") {
+            post("/app/profile/changePassword") {
                 val postParams = call.receiveParameters()
                 val newPassword = postParams["newPassword"] ?: error("No new value provided")
                 val principal = call.principal<JWTPrincipal>()
