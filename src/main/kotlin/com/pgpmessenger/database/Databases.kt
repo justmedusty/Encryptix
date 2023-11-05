@@ -3,6 +3,7 @@ package com.pgpmessenger.database
 import com.pgpmessenger.functionality.login.hashPassword
 import io.ktor.server.application.*
 import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.mindrot.jbcrypt.BCrypt
 
@@ -51,13 +52,16 @@ fun createUser(user: User) {
         else if (user.passwordHash.length < 8){
             throw IllegalArgumentException("Password must be at least 8 characters")
         }
-        else if (user.userName.length < 6 || user.userName.length < 45){
+        else if (user.userName.length < 6 || user.userName.length > 45){
             throw IllegalArgumentException("Username must be between 6 and 45 characters")
         }
-        Users.insert {
-            it[userName] = user.userName
-            it[passwordHash] = hashPassword(user.passwordHash)
-        } get Users.id
+        else{
+            Users.insert {
+                it[userName] = user.userName
+                it[passwordHash] = hashPassword(user.passwordHash)
+            } get Users.id
+        }
+
     }
 }
 
@@ -80,9 +84,6 @@ fun updatePublicKey(userName: String,newPublicKey : String): Boolean {
         return true
     }
 }
-
-
-
 
 
 fun deleteUser(id: Int) {

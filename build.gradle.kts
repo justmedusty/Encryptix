@@ -5,16 +5,16 @@ val logback_version: String by project
 val postgres_version: String by project
 val h2_version: String by project
 plugins {
-    kotlin("jvm") version "1.9.20"
-    id("io.ktor.plugin") version "2.3.5"
-    id("org.jetbrains.kotlin.plugin.serialization") version "1.9.20"
+    kotlin("jvm") version "1.8.0"
+    id("io.ktor.plugin") version "2.2.3"
+    id("org.jetbrains.kotlin.plugin.serialization") version "1.8.0"
 }
 
 group = "com.test"
 version = "0.0.1"
 
 application {
-    mainClass.set("com.test.ApplicationKt")
+    mainClass.set("com.pgpmessenger.ApplicationKt")
 
     val isDevelopment: Boolean = project.ext.has("development")
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
@@ -44,8 +44,8 @@ dependencies {
     testImplementation("io.ktor:ktor-server-tests-jvm")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
     implementation("org.mindrot:jbcrypt:0.4")
-    implementation("org.jetbrains.exposed:exposed-core:0.37.3")
-    implementation("org.jetbrains.exposed:exposed-dao:0.37.3")
-    implementation("org.jetbrains.exposed:exposed-jdbc:0.37.3")
+    implementation("org.jetbrains.exposed:exposed-core:0.40.1")
+    implementation("org.jetbrains.exposed:exposed-dao:0.40.1")
+    implementation("org.jetbrains.exposed:exposed-jdbc:0.40.1")
     implementation("org.postgresql:postgresql:42.5.1")
 }
