@@ -31,6 +31,7 @@ fun Application.configureLogin() {
                 val userName = principal.name
                 val token = (CreateJWT(JWTConfig("dustyns web app","https://jwt-provider-domain/",System.getenv("JWT_SECRET"),userName,700000)))
                 call.respond(mapOf("access_token" to token))
+                println(token)
             }
 
 

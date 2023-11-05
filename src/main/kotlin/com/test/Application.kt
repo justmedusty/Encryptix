@@ -6,6 +6,7 @@ import com.test.resources.configureHTTP
 import com.test.resources.configureRouting
 import com.test.functionality.configureSerialization
 import com.test.functionality.login.configureLogin
+import com.test.functionality.profile_changes.configureProfileChangeRoutes
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
@@ -25,4 +26,5 @@ fun Application.module() {
     configureDatabase()
     configureRouting()
     configureLogin()
+    configureProfileChangeRoutes()
 }

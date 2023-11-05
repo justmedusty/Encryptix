@@ -48,5 +48,4 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-dao:0.37.3")
     implementation("org.jetbrains.exposed:exposed-jdbc:0.37.3")
     implementation("org.postgresql:postgresql:42.5.1")
-    implementation("io.github.cdimascio:java-dotenv:5.2.2")
 }

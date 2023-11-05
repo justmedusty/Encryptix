@@ -56,7 +56,7 @@ fun createUser(user: User) {
         if (userNameAlreadyExists(user.userName)) {
             throw IllegalArgumentException("User with the same user_name already exists")
         }
-        else if (user.passwordHash == null || user.passwordHash.length < 8 ){
+        else if (user.passwordHash.length < 8){
             throw IllegalArgumentException("Password must be at least 8 characters")
         }
         Users.insert {
@@ -72,16 +72,23 @@ fun readUser(userName: String): Query {
     }
 }
 
-fun updatePublicKey(user:User) {
-    transaction {
-        if (verifyCredentials(user.userName,user.passwordHash)){
+fun updatePublicKey(userName: String,newPublicKey : String): Boolean {
+    if (publicKeyAlreadyExists(newPublicKey)) {
+        return false
+    } else {
+        transaction {
+
             Users.update({ Users.userName eq userName }) {
-                it[publicKey] = user.publicKey
+                it[publicKey] = newPublicKey
             }
         }
-
+        return true
     }
 }
+
+
+
+
 
 fun deleteUser(id: Int) {
     transaction {
