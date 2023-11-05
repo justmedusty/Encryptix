@@ -6,7 +6,7 @@ val postgres_version: String by project
 val h2_version: String by project
 plugins {
     kotlin("jvm") version "1.8.0"
-    id("io.ktor.plugin") version "2.2.3"
+    id("io.ktor.plugin") version "2.2.4"
     id("org.jetbrains.kotlin.plugin.serialization") version "1.8.0"
 }
 
@@ -42,7 +42,8 @@ dependencies {
     implementation("io.ktor:ktor-server-netty-jvm")
     implementation("ch.qos.logback:logback-classic:$logback_version")
     testImplementation("io.ktor:ktor-server-tests-jvm")
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
+    //testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
+    testImplementation("org.jetbrains.kotlin:kotlin-test-junit:1.7.0")
     implementation("org.mindrot:jbcrypt:0.4")
     implementation("org.jetbrains.exposed:exposed-core:0.40.1")
     implementation("org.jetbrains.exposed:exposed-dao:0.40.1")
