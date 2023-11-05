@@ -25,10 +25,10 @@ fun Application.configureProfileChangeRoutes(){
                 if (isValidOpenPGPPublicKey(key)){
                     val success : Boolean = updatePublicKey(username,key)
                     if (success){
-                        call.respond(HttpStatusCode.OK,"Public Key Updated")
+                        call.respond(HttpStatusCode.OK,mapOf("Response" to "Public Key Successfully Created" ))
                     }
                     else{
-                        call.respond(HttpStatusCode.Conflict,"Public Key Already Exists")
+                        call.respond(HttpStatusCode.Conflict, mapOf("Response" to "Public Key Already Exists" ))
                     }
                 }
             }

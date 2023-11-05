@@ -9,7 +9,7 @@ import org.mindrot.jbcrypt.BCrypt
 object Users : Table(name = "public.'Users'") {
     val id: Column<Int> = integer("id").autoIncrement()
     val userName: Column<String> = varchar("user_name",45)
-    val publicKey: Column<String> = varchar("public_key",100000)
+    val publicKey: Column<String> = text("public_key")
     val passwordHash = text("password_hash")
 
     override val primaryKey = PrimaryKey(id)
@@ -22,10 +22,9 @@ data class User(
 )
 
 fun Application.configureDatabase() {
-    //this should be grabbed from an env variable hidden away but right now i dont care
-    val url = System.getenv("POSTGRES_URL") //environment.config.property("postgres.url").getString()
-    val user = System.getenv("POSTGRES_USER")// environment.config.property("postgres.user").getString()
-    val password = System.getenv("POSTGRES_PASSWORD")//environment.config.property("postgres.password").getString()
+    val url = System.getenv("POSTGRES_URL")
+    val user = System.getenv("POSTGRES_USER")
+    val password = System.getenv("POSTGRES_PASSWORD")
 
     try {
         Database.connect(url, driver="org.postgresql.Driver", user = user,password = password )
