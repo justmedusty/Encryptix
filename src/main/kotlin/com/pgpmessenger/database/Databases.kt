@@ -51,6 +51,9 @@ fun createUser(user: User) {
         else if (user.passwordHash.length < 8){
             throw IllegalArgumentException("Password must be at least 8 characters")
         }
+        else if (user.userName.length < 6 || user.userName.length < 45){
+            throw IllegalArgumentException("Username must be between 6 and 45 characters")
+        }
         Users.insert {
             it[userName] = user.userName
             it[passwordHash] = hashPassword(user.passwordHash)
