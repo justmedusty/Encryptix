@@ -1,6 +1,8 @@
 package com.pgpmessenger.functionality.profile_changes
 
 import com.pgpmessenger.database.updatePublicKey
+import com.pgpmessenger.database.updateUserCredentials
+import com.pgpmessenger.database.userAndPasswordValidation
 import com.pgpmessenger.functionality.isValidOpenPGPPublicKey
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -29,6 +31,23 @@ fun Application.configureProfileChangeRoutes(){
                     }
                     else{
                         call.respond(HttpStatusCode.Conflict, mapOf("Response" to "Public Key Already Exists" ))
+                    }
+                }
+            }
+            post("/app/changeUserName") {
+                val postParams = call.receiveParameters()
+                val newUserName = postParams["newUser"] ?: error("No new value provided")
+                val principal = call.principal<JWTPrincipal>()
+                val username = principal?.payload?.subject.toString()
+
+                if (newUserName.isNullOrEmpty() || !userAndPasswordValidation(newUserName,"")) {
+                    call.respond(HttpStatusCode.BadRequest, mapOf("Response" to "Please provide a valid username"))
+                } else {
+                    try {
+                        updateUserCredentials(username, "", newUserName)
+                        call.respond(HttpStatusCode.OK, mapOf("Response" to "Username updated successfully"))
+                    } catch (e: IllegalArgumentException) {
+                        call.respond(HttpStatusCode.BadRequest, mapOf("Response" to e.message))
                     }
                 }
             }

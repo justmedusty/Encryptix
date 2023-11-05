@@ -42,27 +42,36 @@ fun Application.configureDatabase() {
     }
 }
 
-
+fun userAndPasswordValidation(userName: String, password: String): Boolean {
+    return when {
+        password.isNullOrEmpty() && !userName.isNullOrEmpty() -> {
+            if (userNameAlreadyExists(userName)) {
+                false
+            } else userName.length in 6..45
+        }
+        !password.isNullOrEmpty() && userName.isEmpty() -> {
+            password.length >= 8
+        }
+        else -> {
+            throw IllegalArgumentException("Unknown error")
+        }
+    }
+}
 // Functions to perform CRUD operations on Users table
 fun createUser(user: User) {
     return transaction {
-        if (userNameAlreadyExists(user.userName)) {
-            throw IllegalArgumentException("User with the same user_name already exists")
-        }
-        else if (user.passwordHash.length < 8){
-            throw IllegalArgumentException("Password must be at least 8 characters")
-        }
-        else if (user.userName.length < 6 || user.userName.length > 45){
-            throw IllegalArgumentException("Username must be between 6 and 45 characters")
-        }
-        else{
-            Users.insert {
-                it[userName] = user.userName
-                it[passwordHash] = hashPassword(user.passwordHash)
-            } get Users.id
+       if (userAndPasswordValidation(user.userName,"") && userAndPasswordValidation("",user.passwordHash)){
+           Users.insert {
+               it[userName] = user.userName
+               it[passwordHash] = hashPassword(user.passwordHash)
+           } get Users.id
+
+       }
+
+
         }
 
-    }
+
 }
 
 fun readUser(userName: String): Query {
@@ -85,7 +94,28 @@ fun updatePublicKey(userName: String,newPublicKey : String): Boolean {
     }
 }
 
-
+fun updateUserCredentials(userName: String, password: String, newValue: String) {
+    when {
+        password.isNullOrEmpty() && !newValue.isNullOrEmpty()  -> {
+            transaction {
+                Users.update({ Users.userName eq userName }) {
+                    it[Users.userName] = newValue
+                }
+                return@transaction
+            }
+        }
+        !password.isNullOrEmpty() -> {
+            transaction {
+                Users.update({ Users.userName eq userName }) {
+                    it[passwordHash] = hashPassword(newValue)
+                }
+            }
+        }
+        else -> {
+            throw IllegalArgumentException("An error occurred during the update")
+        }
+    }
+}
 fun deleteUser(id: Int) {
     transaction {
         Users.deleteWhere { Users.id eq id }
