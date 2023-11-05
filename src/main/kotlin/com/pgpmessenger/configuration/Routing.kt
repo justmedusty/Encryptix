@@ -17,15 +17,7 @@ fun Application.configureRouting() {
     }
     routing {
 
-        get("/jwt/req") {
-            call.respondText(CreateJWT(JWTConfig("dustyns web app","https://jwt-provider-domain/","secret","dustyn",700000)))
 
-        }
-        authenticate("jwt"){
-            get("/protected"){
-                call.respondText("You got protected info")
-            }
-        }
 
     }
 }

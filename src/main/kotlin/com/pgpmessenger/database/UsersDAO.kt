@@ -74,9 +74,19 @@ fun createUser(user: User) {
 
 }
 
-fun readUser(userName: String): Query {
+fun getUserId(userName: String): Int {
     return transaction {
-        Users.select { Users.userName eq userName }
+        Users.select { Users.userName eq userName }.singleOrNull()?.get(Users.id)!!
+    }
+}
+
+fun getUserName(id: String?): String? {
+    val userId = id?.toIntOrNull() // Convert the String ID to Int or adjust the conversion based on the actual ID type
+
+    return transaction {
+        userId?.let { convertedId ->
+            Users.select { Users.id eq convertedId }.singleOrNull()?.get(Users.userName)
+        }
     }
 }
 

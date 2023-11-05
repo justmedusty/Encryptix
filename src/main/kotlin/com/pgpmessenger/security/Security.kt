@@ -57,7 +57,7 @@ data class JWTConfig(
     val audience: String,
     val domain: String,
     val secret: String,
-    val user: String,
+    val id: Int,
     val expiresInMS: Long
 )
 
@@ -66,6 +66,6 @@ fun CreateJWT(jwtConfig: JWTConfig): String {
         .withAudience(jwtConfig.audience)
         .withIssuer(jwtConfig.domain)
         .withExpiresAt(Date(System.currentTimeMillis() + jwtConfig.expiresInMS))
-        .withSubject(jwtConfig.user)
+        .withSubject(jwtConfig.id.toString())
         .sign(Algorithm.HMAC256(System.getenv("JWT_SECRET")))
 }

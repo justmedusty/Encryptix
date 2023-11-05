@@ -1,6 +1,7 @@
 package com.pgpmessenger.functionality.login
 import com.pgpmessenger.database.User
 import com.pgpmessenger.database.createUser
+import com.pgpmessenger.database.getUserId
 import com.pgpmessenger.database.userNameAlreadyExists
 import com.pgpmessenger.security.CreateJWT
 import com.pgpmessenger.security.JWTConfig
@@ -28,7 +29,8 @@ fun Application.configureLogin() {
             post("/app/login") {
                 val principal = call.principal<UserIdPrincipal>() ?: error("Invalid credentials")
                 val userName = principal.name
-                val token = (CreateJWT(JWTConfig("dustyns web app","https://jwt-provider-domain/",System.getenv("JWT_SECRET"),userName,700000)))
+                val token = (CreateJWT(JWTConfig("dustyns web app","https://jwt-provider-domain/",System.getenv("JWT_SECRET"),
+                    getUserId(userName),700000)))
                 call.respond(mapOf("access_token" to token))
                 println(token)
             }
