@@ -8,6 +8,8 @@ import org.pgpainless.algorithm.SymmetricKeyAlgorithm
 import org.pgpainless.encryption_signing.*
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileOutputStream
 import java.util.*
 
 
@@ -39,4 +41,18 @@ fun encryptMessage(publicKey: String, message: String): String {
     // Information about the encryption (algorithms, detached signatures etc.)
     val encryptedMessage = Base64.getEncoder().encodeToString(outputStream.toByteArray())
 
-return encryptedMessage}
+
+    return encryptedMessage
+}
+
+
+fun saveAsGPGFile(encryptedMessage: String, fileName: String) {
+    val base64Decoded = Base64.getDecoder().decode(encryptedMessage)
+    val file = File("$fileName.gpg")
+
+    val outputStream = FileOutputStream(file)
+    outputStream.write(base64Decoded)
+    outputStream.close()
+
+    println("Encrypted message saved to ${file.absolutePath}")
+}

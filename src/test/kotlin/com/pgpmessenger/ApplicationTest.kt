@@ -2,6 +2,7 @@ package com.pgpmessenger
 
 import com.pgpmessenger.configuration.configureRouting
 import com.pgpmessenger.functionality.encryption.encryptMessage
+import com.pgpmessenger.functionality.encryption.saveAsGPGFile
 import com.pgpmessenger.security.configureSecurity
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
@@ -36,12 +37,7 @@ class ApplicationTest {
                     "BQ==\n" +
                     "=LRPh\n" +
                     "-----END PGP PUBLIC KEY BLOCK-----\n","test hello dustyn")
-            val outputFilePath= "src/test.gpg"
-            val outputStream = BufferedOutputStream((FileOutputStream(outputFilePath)))
-            outputStream.write(Base64.getDecoder().decode(encryptedMsg))
-            outputStream.write(encryptedMsg.toByteArray())
-            outputStream.close()
-
+            saveAsGPGFile(encryptedMsg,"testfile")
             assertNotNull(encryptedMsg)
             println(encryptedMsg)
         }
