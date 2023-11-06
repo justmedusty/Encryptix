@@ -109,15 +109,14 @@ fun getUserName(id: String?): String? {
     }
 }
 
-fun getPublicKey(id: String?): String? {
-    val userId = id?.toIntOrNull()
+fun getPublicKey(userName: String): String? {
     return transaction {
-        userId?.let { convertedId ->
-            Users.select { Users.id eq convertedId }.singleOrNull()?.get(Users.publicKey)
-        }
-    }
+        val result = Users.select { Users.userName eq userName }.singleOrNull()
+        result?.get(Users.publicKey)
 
+    }
 }
+
 
 /**
  * Update public key

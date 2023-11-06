@@ -21,3 +21,5 @@ object Messages : Table(name = "public.Messages") {
 
     override val primaryKey = PrimaryKey(id)
 }
+
+

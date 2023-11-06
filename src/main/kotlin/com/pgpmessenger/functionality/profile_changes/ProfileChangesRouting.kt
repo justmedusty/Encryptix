@@ -1,9 +1,6 @@
 package com.pgpmessenger.functionality.profile_changes
 
-import com.pgpmessenger.database.getUserName
-import com.pgpmessenger.database.updatePublicKey
-import com.pgpmessenger.database.updateUserCredentials
-import com.pgpmessenger.database.userAndPasswordValidation
+import com.pgpmessenger.database.*
 import com.pgpmessenger.functionality.isValidOpenPGPPublicKey
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -79,6 +76,32 @@ fun Application.configureProfileChangeRoutes() {
                     }
                 }
             }
+            post("/app/profile/deleteAccount") {
+                val principal = call.principal<JWTPrincipal>()
+                val id = principal?.payload?.subject
+
+                val userId = id?.toIntOrNull()
+                if (userId != null) {
+                    deleteUser(userId)
+                    call.respond(HttpStatusCode.OK,mapOf("Response" to "Account Deleted"))
+                } else {
+                    call.respond(HttpStatusCode.Conflict,mapOf("Response" to "No Id Found"))
+                }
+            }
+            get("/app/key/getMyPublicKey") {
+                val principal = call.principal<JWTPrincipal>()
+                val id = principal?.payload?.subject
+
+                val userId = id?.toIntOrNull()
+                if (userId != null) {
+                    val publicKey = getPublicKey(getUserName(userId.toString()).toString())
+                    call.respond(HttpStatusCode.OK,mapOf("Response" to "$publicKey"))
+                } else {
+                    call.respond(HttpStatusCode.Conflict,mapOf("Response" to "No Id Found"))
+                }
+            }
+
         }
     }
 }
+

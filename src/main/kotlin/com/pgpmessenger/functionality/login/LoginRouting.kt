@@ -50,7 +50,7 @@ fun Application.configureLogin() {
                 val userName = principal.name
                 val token = (CreateJWT(
                     JWTConfig(
-                        "dustyns web app", "https://jwt-provider-domain/", System.getenv("JWT_SECRET"),
+                        "dustyns-web-app", "https://jwt-provider-domain/", System.getenv("JWT_SECRET"),
                         getUserId(userName), 700000
                     )
                 ))
