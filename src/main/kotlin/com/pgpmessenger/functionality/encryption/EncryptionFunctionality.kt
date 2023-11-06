@@ -37,9 +37,7 @@ fun encryptMessage(publicKey: String, message: String): ByteArray {
                 EncryptionOptions()
                     .addRecipient(publicKeyObj)
                     .overrideEncryptionAlgorithm(SymmetricKeyAlgorithm.AES_192),
-                SigningOptions() // Sign in-line (using one-pass-signature packet)
-                    // Sign using a detached signature
-                    .overrideHashAlgorithm(HashAlgorithm.SHA256)
+                   null
             ).setAsciiArmor(true) // Ascii armor or not
         )
 
