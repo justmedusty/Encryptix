@@ -4,6 +4,16 @@ import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import java.util.*
 
+/**
+ * J w t config
+ *
+ * @property audience
+ * @property domain
+ * @property secret
+ * @property id
+ * @property expiresInMS
+ * @constructor Create empty J w t config
+ */
 data class JWTConfig(
     val audience: String,
     val domain: String,
@@ -12,6 +22,12 @@ data class JWTConfig(
     val expiresInMS: Long
 )
 
+/**
+ * Create j w t
+ *
+ * @param jwtConfig
+ * @return
+ */
 fun CreateJWT(jwtConfig: JWTConfig): String {
     return JWT.create()
         .withAudience(jwtConfig.audience)

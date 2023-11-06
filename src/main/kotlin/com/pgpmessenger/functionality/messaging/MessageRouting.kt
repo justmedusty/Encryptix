@@ -11,6 +11,10 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import java.time.LocalDateTime
 
+/**
+ * Configure message routes
+ *
+ */
 fun Application.configureMessageRoutes() {
 
     routing {
@@ -34,9 +38,8 @@ fun Application.configureMessageRoutes() {
                         call.respond(HttpStatusCode.Conflict, mapOf("Response" to "Error occurred"))
                     }
 
-                }
-                else{
-                    call.respond(HttpStatusCode.Conflict,mapOf("Response" to "User does not exist"))
+                } else {
+                    call.respond(HttpStatusCode.Conflict, mapOf("Response" to "User does not exist"))
                 }
             }
 
@@ -47,7 +50,7 @@ fun Application.configureMessageRoutes() {
 
                 val userId = id?.toIntOrNull()
                 if (userId != null) {
-                    val messages : List<Message> = getUserMessages(userId)
+                    val messages: List<Message> = getUserMessages(userId)
                     call.respond(HttpStatusCode.OK, mapOf("Messages" to "$messages"))
                 } else {
                     call.respond(HttpStatusCode.Conflict, mapOf("Response" to "No Id Found"))

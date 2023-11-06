@@ -6,7 +6,7 @@ import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.mindrot.jbcrypt.BCrypt
 
-object Users : Table(name = "public.'Users'") {
+object Users : Table(name = "Users") {
     val id: Column<Int> = integer("id").autoIncrement()
     val userName: Column<String> = varchar("user_name", 45).uniqueIndex()
     val publicKey: Column<String> = text("public_key").uniqueIndex()

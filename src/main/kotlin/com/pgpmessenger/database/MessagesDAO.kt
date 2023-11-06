@@ -12,7 +12,7 @@ import org.jetbrains.exposed.sql.statements.api.ExposedBlob
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.time.LocalDateTime
 
-object Messages : Table(name = "public.'Messages'") {
+object Messages : Table(name = "Messages") {
     private val id: Column<Int> = integer("id").autoIncrement()
     val senderId: Column<Int> = integer("sender_id") references Users.id
     val receiverId: Column<Int> = integer("receiver_id") references Users.id
