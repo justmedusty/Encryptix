@@ -1,7 +1,6 @@
 package com.pgpmessenger.database
 
 import com.pgpmessenger.functionality.login.hashPassword
-import io.ktor.server.application.*
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -9,77 +8,97 @@ import org.mindrot.jbcrypt.BCrypt
 
 object Users : Table(name = "public.'Users'") {
     val id: Column<Int> = integer("id").autoIncrement()
-    val userName: Column<String> = varchar("user_name",45)
-    val publicKey: Column<String> = text("public_key")
+    val userName: Column<String> = varchar("user_name", 45).uniqueIndex()
+    val publicKey: Column<String> = text("public_key").uniqueIndex()
     val passwordHash = text("password_hash")
 
     override val primaryKey = PrimaryKey(id)
 }
 
+/**
+ * User
+ *
+ * @property userName
+ * @property publicKey
+ * @property passwordHash
+ * @constructor Create empty User
+ */
 data class User(
-    val userName : String,
+    val userName: String,
     val publicKey: String,
-    val passwordHash : String
+    val passwordHash: String
 )
 
-fun Application.configureDatabase() {
-    val url = System.getenv("POSTGRES_URL")
-    val user = System.getenv("POSTGRES_USER")
-    val password = System.getenv("POSTGRES_PASSWORD")
+/**
+ * Configure database
+ *
+ */
 
-    try {
-        Database.connect(url, driver="org.postgresql.Driver", user = user,password = password )
 
-    }
-    catch (e : Exception){
-        println(e)
-    }
-
-    transaction {
-        SchemaUtils.create(Users)
-        //dont really need this but fuck it for now
-        addLogger(StdOutSqlLogger)
-    }
-}
-
+/**
+ * User and password validation
+ *
+ * @param userName
+ * @param password
+ * @return
+ */
 fun userAndPasswordValidation(userName: String, password: String): Boolean {
     return when {
-        password.isNullOrEmpty() && !userName.isNullOrEmpty() -> {
+        password.isEmpty() && !userName.isEmpty() -> {
             if (userNameAlreadyExists(userName)) {
                 false
             } else userName.length in 6..45
         }
-        !password.isNullOrEmpty() && userName.isEmpty() -> {
+
+        !password.isEmpty() && userName.isEmpty() -> {
             password.length >= 8
         }
+
         else -> {
             throw IllegalArgumentException("Unknown error")
         }
     }
 }
-// Functions to perform CRUD operations on Users table
+
+/**
+ * Create user
+ *
+ * @param user
+ */// Functions to perform CRUD operations on Users table
 fun createUser(user: User) {
     return transaction {
-       if (userAndPasswordValidation(user.userName,"") && userAndPasswordValidation("",user.passwordHash)){
-           Users.insert {
-               it[userName] = user.userName
-               it[passwordHash] = hashPassword(user.passwordHash)
-           } get Users.id
-
-       }
-
+        if (userAndPasswordValidation(user.userName, "") && userAndPasswordValidation("", user.passwordHash)) {
+            Users.insert {
+                it[userName] = user.userName
+                it[passwordHash] = hashPassword(user.passwordHash)
+            } get Users.id
 
         }
 
 
+    }
+
+
 }
 
+/**
+ * Get user id
+ *
+ * @param userName
+ * @return
+ */
 fun getUserId(userName: String): Int {
     return transaction {
         Users.select { Users.userName eq userName }.singleOrNull()?.get(Users.id)!!
     }
 }
 
+/**
+ * Get user name
+ *
+ * @param id
+ * @return
+ */
 fun getUserName(id: String?): String? {
     val userId = id?.toIntOrNull() // Convert the String ID to Int or adjust the conversion based on the actual ID type
 
@@ -90,7 +109,24 @@ fun getUserName(id: String?): String? {
     }
 }
 
-fun updatePublicKey(userName: String,newPublicKey : String): Boolean {
+fun getPublicKey(id: String?): String? {
+    val userId = id?.toIntOrNull()
+    return transaction {
+        userId?.let { convertedId ->
+            Users.select { Users.id eq convertedId }.singleOrNull()?.get(Users.publicKey)
+        }
+    }
+
+}
+
+/**
+ * Update public key
+ *
+ * @param userName
+ * @param newPublicKey
+ * @return
+ */
+fun updatePublicKey(userName: String, newPublicKey: String): Boolean {
     if (publicKeyAlreadyExists(newPublicKey)) {
         return false
     } else {
@@ -104,6 +140,13 @@ fun updatePublicKey(userName: String,newPublicKey : String): Boolean {
     }
 }
 
+/**
+ * Update user credentials
+ *
+ * @param userName
+ * @param password
+ * @param newValue
+ */
 fun updateUserCredentials(userName: String, password: String, newValue: String) {
     transaction {
         when {
@@ -112,23 +155,37 @@ fun updateUserCredentials(userName: String, password: String, newValue: String) 
                     it[Users.userName] = newValue
                 }
             }
+
             password.isNotEmpty() && newValue.isNotEmpty() -> {
                 Users.update({ Users.userName eq userName }) {
                     it[passwordHash] = hashPassword(newValue)
                 }
             }
+
             else -> {
                 throw IllegalArgumentException("An error occurred during the update")
             }
         }
     }
 }
+
+/**
+ * Delete user
+ *
+ * @param id
+ */
 fun deleteUser(id: Int) {
     transaction {
         Users.deleteWhere { Users.id eq id }
     }
 }
 
+/**
+ * User name already exists
+ *
+ * @param userName
+ * @return
+ */
 fun userNameAlreadyExists(userName: String): Boolean {
     return transaction {
         Users.select { Users.userName eq userName }
@@ -136,6 +193,12 @@ fun userNameAlreadyExists(userName: String): Boolean {
     }
 }
 
+/**
+ * Public key already exists
+ *
+ * @param publicKey
+ * @return
+ */
 fun publicKeyAlreadyExists(publicKey: String): Boolean {
     return transaction {
         Users.select { Users.publicKey eq publicKey }
@@ -143,11 +206,17 @@ fun publicKeyAlreadyExists(publicKey: String): Boolean {
     }
 }
 
-//this was a major pain in the cock to get the hashing to work
-fun verifyCredentials(userName: String,password: String): Boolean{
+/**
+ * Verify credentials
+ *
+ * @param userName
+ * @param password
+ * @return
+ *///this was a major pain in the cock to get the hashing to work
+fun verifyCredentials(userName: String, password: String): Boolean {
     return transaction {
         val user = Users.select { Users.userName eq userName }.singleOrNull()
-        user != null && BCrypt.checkpw(password,user[Users.passwordHash])
+        user != null && BCrypt.checkpw(password, user[Users.passwordHash])
 
     }
 }

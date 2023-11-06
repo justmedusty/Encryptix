@@ -13,25 +13,25 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
-fun Application.configureProfileChangeRoutes(){
+/**
+ * Configure profile change routes
+ *
+ */
+fun Application.configureProfileChangeRoutes() {
 
     routing {
         authenticate("jwt") {
-            post("/app/key/upload"){
+            post("/app/key/upload") {
                 val postParams = call.receiveParameters()
                 val key = postParams["publicKey"] ?: error("No key provided")
-                if(key==null){
-                    call.respond(HttpStatusCode.Conflict,mapOf("Response" to "Please Upload A Key" ))
-                }
                 val principal = call.principal<JWTPrincipal>()
                 val username = getUserName(principal?.payload?.subject)
-                if (isValidOpenPGPPublicKey(key)){
-                    val success : Boolean = updatePublicKey(username.toString(),key)
-                    if (success){
-                        call.respond(HttpStatusCode.OK,mapOf("Response" to "Public Key Successfully Created" ))
-                    }
-                    else{
-                        call.respond(HttpStatusCode.Conflict, mapOf("Response" to "Public Key Already Exists" ))
+                if (isValidOpenPGPPublicKey(key)) {
+                    val success: Boolean = updatePublicKey(username.toString(), key)
+                    if (success) {
+                        call.respond(HttpStatusCode.OK, mapOf("Response" to "Public Key Successfully Created"))
+                    } else {
+                        call.respond(HttpStatusCode.Conflict, mapOf("Response" to "Public Key Already Exists"))
                     }
                 }
             }
@@ -41,8 +41,11 @@ fun Application.configureProfileChangeRoutes(){
                 val principal = call.principal<JWTPrincipal>()
                 val id = principal?.payload?.subject
 
-                if (newUserName.isNullOrEmpty() || !userAndPasswordValidation(newUserName,"")) {
-                    call.respond(HttpStatusCode.BadRequest, mapOf("Response" to "Please provide a valid username. Must be between 6 and 45 characters and be unique"))
+                if (newUserName.isEmpty() || !userAndPasswordValidation(newUserName, "")) {
+                    call.respond(
+                        HttpStatusCode.BadRequest,
+                        mapOf("Response" to "Please provide a valid username. Must be between 6 and 45 characters and be unique")
+                    )
                 } else {
                     try {
                         updateUserCredentials(getUserName(id).toString(), "", newUserName)
@@ -58,11 +61,18 @@ fun Application.configureProfileChangeRoutes(){
                 val principal = call.principal<JWTPrincipal>()
                 val id = principal?.payload?.subject
 
-                if (newPassword.isNullOrEmpty() || !userAndPasswordValidation("",newPassword)) {
-                    call.respond(HttpStatusCode.BadRequest, mapOf("Response" to "Please provide a valid password. Must be at least 8 characters"))
+                if (newPassword.isEmpty() || !userAndPasswordValidation("", newPassword)) {
+                    call.respond(
+                        HttpStatusCode.BadRequest,
+                        mapOf("Response" to "Please provide a valid password. Must be at least 8 characters")
+                    )
                 } else {
                     try {
-                        updateUserCredentials(getUserName(id).toString(),"this is scuffed i know but for now i dont care" , newPassword)
+                        updateUserCredentials(
+                            getUserName(id).toString(),
+                            "this is scuffed i know but for now i dont care",
+                            newPassword
+                        )
                         call.respond(HttpStatusCode.OK, mapOf("Response" to "Password updated successfully"))
                     } catch (e: IllegalArgumentException) {
                         call.respond(HttpStatusCode.BadRequest, mapOf("Response" to e.message))

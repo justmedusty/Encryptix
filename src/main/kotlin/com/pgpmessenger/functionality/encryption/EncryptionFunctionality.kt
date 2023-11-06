@@ -5,7 +5,10 @@ import org.bouncycastle.util.io.Streams
 import org.pgpainless.PGPainless
 import org.pgpainless.algorithm.HashAlgorithm
 import org.pgpainless.algorithm.SymmetricKeyAlgorithm
-import org.pgpainless.encryption_signing.*
+import org.pgpainless.encryption_signing.EncryptionOptions
+import org.pgpainless.encryption_signing.EncryptionStream
+import org.pgpainless.encryption_signing.ProducerOptions
+import org.pgpainless.encryption_signing.SigningOptions
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -13,6 +16,13 @@ import java.io.FileOutputStream
 import java.util.*
 
 
+/**
+ * Encrypt message
+ *
+ * @param publicKey
+ * @param message
+ * @return encrypted message
+ */
 fun encryptMessage(publicKey: String, message: String): String {
     val outputStream = ByteArrayOutputStream()
 
@@ -46,6 +56,12 @@ fun encryptMessage(publicKey: String, message: String): String {
 }
 
 
+/**
+ * Save as g p g file
+ *
+ * @param encryptedMessage
+ * @param fileName
+ */
 fun saveAsGPGFile(encryptedMessage: String, fileName: String) {
     val base64Decoded = Base64.getDecoder().decode(encryptedMessage)
     val file = File("$fileName.gpg")
