@@ -35,6 +35,48 @@ data class User(
  */
 
 
+
+/**
+ * User name already exists
+ *
+ * @param userName
+ * @return
+ */
+fun userNameAlreadyExists(userName: String): Boolean {
+    return transaction {
+        Users.select { Users.userName eq userName }
+            .count() > 0
+    }
+}
+
+/**
+ * Public key already exists
+ *
+ * @param publicKey
+ * @return
+ */
+fun publicKeyAlreadyExists(publicKey: String): Boolean {
+    return transaction {
+        Users.select { Users.publicKey eq publicKey }
+            .count() > 0
+    }
+}
+
+/**
+ * Verify credentials
+ *
+ * @param userName
+ * @param password
+ * @return
+ *///this was a major pain in the cock to get the hashing to work
+fun verifyCredentials(userName: String, password: String): Boolean {
+    return transaction {
+        val user = Users.select { Users.userName eq userName }.singleOrNull()
+        user != null && BCrypt.checkpw(password, user[Users.passwordHash])
+
+    }
+}
+
 /**
  * User and password validation
  *
@@ -176,47 +218,6 @@ fun updateUserCredentials(userName: String, password: String, newValue: String) 
 fun deleteUser(id: Int) {
     transaction {
         Users.deleteWhere { Users.id eq id }
-    }
-}
-
-/**
- * User name already exists
- *
- * @param userName
- * @return
- */
-fun userNameAlreadyExists(userName: String): Boolean {
-    return transaction {
-        Users.select { Users.userName eq userName }
-            .count() > 0
-    }
-}
-
-/**
- * Public key already exists
- *
- * @param publicKey
- * @return
- */
-fun publicKeyAlreadyExists(publicKey: String): Boolean {
-    return transaction {
-        Users.select { Users.publicKey eq publicKey }
-            .count() > 0
-    }
-}
-
-/**
- * Verify credentials
- *
- * @param userName
- * @param password
- * @return
- *///this was a major pain in the cock to get the hashing to work
-fun verifyCredentials(userName: String, password: String): Boolean {
-    return transaction {
-        val user = Users.select { Users.userName eq userName }.singleOrNull()
-        user != null && BCrypt.checkpw(password, user[Users.passwordHash])
-
     }
 }
 

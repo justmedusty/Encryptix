@@ -5,6 +5,7 @@ import com.pgpmessenger.configuration.configureRouting
 import com.pgpmessenger.configuration.configureSecurity
 import com.pgpmessenger.configuration.configureSerialization
 import com.pgpmessenger.functionality.login.configureLogin
+import com.pgpmessenger.functionality.messaging.configureMessageRoutes
 import com.pgpmessenger.functionality.profile_changes.configureProfileChangeRoutes
 import configureDatabase
 import io.ktor.server.application.*
@@ -26,4 +27,5 @@ fun Application.module() {
     configureRouting()
     configureLogin()
     configureProfileChangeRoutes()
+    configureMessageRoutes()
 }

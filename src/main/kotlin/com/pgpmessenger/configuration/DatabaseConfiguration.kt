@@ -1,3 +1,4 @@
+import com.pgpmessenger.database.Messages
 import com.pgpmessenger.database.Users
 import io.ktor.server.application.*
 import org.jetbrains.exposed.sql.Database
@@ -23,7 +24,7 @@ fun Application.configureDatabase() {
     }
 
     transaction {
-        SchemaUtils.create(Users)
+        SchemaUtils.create(Users, Messages)
         //dont really need this but fuck it for now
         addLogger(StdOutSqlLogger)
     }

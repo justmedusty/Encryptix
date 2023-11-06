@@ -23,7 +23,7 @@ import java.util.*
  * @param message
  * @return encrypted message
  */
-fun encryptMessage(publicKey: String, message: String): String {
+fun encryptMessage(publicKey: String, message: String): ByteArray {
     val outputStream = ByteArrayOutputStream()
 
     // Parse the publicKey String to a PGPPublicKeyRing
@@ -52,7 +52,7 @@ fun encryptMessage(publicKey: String, message: String): String {
     val encryptedMessage = Base64.getEncoder().encodeToString(outputStream.toByteArray())
 
 
-    return encryptedMessage
+    return encryptedMessage.toByteArray()
 }
 
 
