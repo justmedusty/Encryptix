@@ -25,7 +25,8 @@ fun Application.configureMessageRoutes() {
                 val receiver = postParams["receiver"] ?: error("No receiver provided")
                 val principal = this.call.principal<JWTPrincipal>()
                 val id = principal?.payload?.subject
-                if (userNameAlreadyExists(receiver)) {
+                val publicKey : String = getPublicKey(getUserName(id).toString()).toString()
+                if (userNameAlreadyExists(receiver) && publicKey.isNotEmpty()) {
                     if (id != null) {
                         sendMessage(
                             id.toInt(),
@@ -35,7 +36,7 @@ fun Application.configureMessageRoutes() {
                         )
                         call.respond(HttpStatusCode.OK, mapOf("Response" to "Message Sent"))
                     } else {
-                        call.respond(HttpStatusCode.Conflict, mapOf("Response" to "Error occurred"))
+                        call.respond(HttpStatusCode.Conflict, mapOf("Response" to "Error occurred, Check that you have a key uploaded"))
                     }
 
                 } else {
