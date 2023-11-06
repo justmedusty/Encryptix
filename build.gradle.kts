@@ -47,6 +47,7 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-core:0.40.1")
     implementation("org.jetbrains.exposed:exposed-dao:0.40.1")
     implementation("org.jetbrains.exposed:exposed-jdbc:0.40.1")
+    implementation("org.jetbrains.exposed:exposed-java-time:0.40.1")
     implementation("org.postgresql:postgresql:42.5.1")
     implementation("org.pgpainless:pgpainless-core:1.6.2")
     implementation("org.bouncycastle:bcprov-jdk18on:1.72")
