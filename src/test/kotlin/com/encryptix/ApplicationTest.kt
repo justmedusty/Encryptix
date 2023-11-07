@@ -1,15 +1,24 @@
-package com.pgpmessenger
+package com.encryptix
 
-import com.pgpmessenger.database.getUserMessages
-import com.pgpmessenger.functionality.encryption.saveAsGPGFile
+import com.encryptix.database.getUserMessages
+import com.encryptix.functionality.encryption.saveAsGPGFile
 import io.ktor.server.testing.*
 import org.jetbrains.exposed.sql.Database
 import org.junit.Test
 import kotlin.test.assertNotNull
 
 
+/**
+ * Application test
+ *
+ * @constructor Create empty Application test
+ */
 class ApplicationTest {
 
+    /**
+     * Test root
+     *
+     */
     @Test
     fun testRoot() = testApplication {
         application {

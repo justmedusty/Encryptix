@@ -1,1 +1,1 @@
-rootProject.name = "Ktor-app"
+rootProject.name = "encryptix"

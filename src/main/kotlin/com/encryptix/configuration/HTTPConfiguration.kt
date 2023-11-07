@@ -1,4 +1,4 @@
-package com.pgpmessenger.configuration
+package com.encryptix.configuration
 
 import io.ktor.server.application.*
 import io.ktor.server.plugins.openapi.*

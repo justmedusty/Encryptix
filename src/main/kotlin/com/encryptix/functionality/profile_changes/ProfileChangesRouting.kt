@@ -1,7 +1,7 @@
-package com.pgpmessenger.functionality.profile_changes
+package com.encryptix.functionality.profile_changes
 
-import com.pgpmessenger.database.*
-import com.pgpmessenger.functionality.isValidOpenPGPPublicKey
+import com.encryptix.database.*
+import com.encryptix.functionality.isValidOpenPGPPublicKey
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*

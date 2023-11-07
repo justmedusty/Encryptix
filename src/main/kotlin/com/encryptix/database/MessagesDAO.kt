@@ -1,6 +1,6 @@
-package com.pgpmessenger.database
+package com.encryptix.database
 
-import com.pgpmessenger.database.Messages.encryptedMessage
+import com.encryptix.database.Messages.encryptedMessage
 import mu.KotlinLogging
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq

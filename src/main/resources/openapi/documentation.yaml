@@ -4,7 +4,7 @@ info:
   description: "Ktor_app API"
   version: "1.0.0"
 servers:
-- url: "https://Ktor_app"
+- url: "https://encryptix"
 paths:
   /cities:
     post:

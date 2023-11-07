@@ -1,14 +1,12 @@
-package com.pgpmessenger.functionality.encryption
+package com.encryptix.functionality.encryption
 
 import org.bouncycastle.openpgp.PGPPublicKeyRing
 import org.bouncycastle.util.io.Streams
 import org.pgpainless.PGPainless
-import org.pgpainless.algorithm.HashAlgorithm
 import org.pgpainless.algorithm.SymmetricKeyAlgorithm
 import org.pgpainless.encryption_signing.EncryptionOptions
 import org.pgpainless.encryption_signing.EncryptionStream
 import org.pgpainless.encryption_signing.ProducerOptions
-import org.pgpainless.encryption_signing.SigningOptions
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.File

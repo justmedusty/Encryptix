@@ -1,7 +1,7 @@
-package com.pgpmessenger.functionality.messaging
+package com.encryptix.functionality.messaging
 
-import com.pgpmessenger.database.*
-import com.pgpmessenger.functionality.encryption.encryptMessage
+import com.encryptix.database.*
+import com.encryptix.functionality.encryption.encryptMessage
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*

@@ -10,11 +10,11 @@ plugins {
     id("org.jetbrains.kotlin.plugin.serialization") version "1.8.0"
 }
 
-group = "com.test"
+group = "encryptix"
 version = "0.0.1"
 
 application {
-    mainClass.set("com.pgpmessenger.ApplicationKt")
+    mainClass.set("com.encryptix.ApplicationKt")
 
     val isDevelopment: Boolean = project.ext.has("development")
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")

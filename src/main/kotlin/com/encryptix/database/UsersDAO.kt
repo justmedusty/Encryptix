@@ -1,6 +1,6 @@
-package com.pgpmessenger.database
+package com.encryptix.database
 
-import com.pgpmessenger.functionality.messaging.login.hashPassword
+import com.encryptix.functionality.messaging.login.hashPassword
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.transactions.transaction

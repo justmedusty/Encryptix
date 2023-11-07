@@ -1,11 +1,11 @@
-package com.pgpmessenger.functionality.messaging.login
+package com.encryptix.functionality.messaging.login
 
-import com.pgpmessenger.database.User
-import com.pgpmessenger.database.createUser
-import com.pgpmessenger.database.getUserId
-import com.pgpmessenger.database.userNameAlreadyExists
-import com.pgpmessenger.security.CreateJWT
-import com.pgpmessenger.security.JWTConfig
+import com.encryptix.database.User
+import com.encryptix.database.createUser
+import com.encryptix.database.getUserId
+import com.encryptix.database.userNameAlreadyExists
+import com.encryptix.security.CreateJWT
+import com.encryptix.security.JWTConfig
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*

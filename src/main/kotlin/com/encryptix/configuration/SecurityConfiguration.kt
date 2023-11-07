@@ -1,8 +1,8 @@
-package com.pgpmessenger.configuration
+package com.encryptix.configuration
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
-import com.pgpmessenger.database.verifyCredentials
+import com.encryptix.database.verifyCredentials
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*

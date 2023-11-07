@@ -1,12 +1,12 @@
-package com.pgpmessenger
+package com.encryptix
 
-import com.pgpmessenger.configuration.configureHTTP
-import com.pgpmessenger.configuration.configureRouting
-import com.pgpmessenger.configuration.configureSecurity
-import com.pgpmessenger.configuration.configureSerialization
-import com.pgpmessenger.functionality.messaging.configureMessageRoutes
-import com.pgpmessenger.functionality.messaging.login.configureLogin
-import com.pgpmessenger.functionality.profile_changes.configureProfileChangeRoutes
+import com.encryptix.configuration.configureHTTP
+import com.encryptix.configuration.configureRouting
+import com.encryptix.configuration.configureSecurity
+import com.encryptix.configuration.configureSerialization
+import com.encryptix.functionality.messaging.configureMessageRoutes
+import com.encryptix.functionality.messaging.login.configureLogin
+import com.encryptix.functionality.profile_changes.configureProfileChangeRoutes
 import configureDatabase
 import io.ktor.server.application.*
 import io.ktor.server.engine.*

@@ -1,5 +1,5 @@
-import com.pgpmessenger.database.Messages
-import com.pgpmessenger.database.Users
+import com.encryptix.database.Messages
+import com.encryptix.database.Users
 import io.ktor.server.application.*
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils

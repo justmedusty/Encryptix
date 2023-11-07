@@ -1,4 +1,4 @@
-package com.pgpmessenger.security
+package com.encryptix.security
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm

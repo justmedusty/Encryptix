@@ -1,4 +1,4 @@
-package com.pgpmessenger.functionality
+package com.encryptix.functionality
 
 
 /**
