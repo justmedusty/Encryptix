@@ -45,7 +45,7 @@ fun Application.configureProfileChangeRoutes() {
                     )
                 } else {
                     try {
-                        updateUserCredentials(getUserName(id).toString(), "", newUserName)
+                        updateUserCredentials(getUserName(id).toString(), false, newUserName)
                         call.respond(HttpStatusCode.OK, mapOf("Response" to "Username updated successfully"))
                     } catch (e: IllegalArgumentException) {
                         call.respond(HttpStatusCode.BadRequest, mapOf("Response" to e.message))
@@ -67,7 +67,7 @@ fun Application.configureProfileChangeRoutes() {
                     try {
                         updateUserCredentials(
                             getUserName(id).toString(),
-                            "this is scuffed i know but for now i dont care",
+                            true,
                             newPassword
                         )
                         call.respond(HttpStatusCode.OK, mapOf("Response" to "Password updated successfully"))

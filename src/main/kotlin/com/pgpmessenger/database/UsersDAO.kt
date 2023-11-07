@@ -188,16 +188,16 @@ fun updatePublicKey(userName: String, newPublicKey: String): Boolean {
  * @param password
  * @param newValue
  */
-fun updateUserCredentials(userName: String, password: String, newValue: String) {
+fun updateUserCredentials(userName: String, password: Boolean, newValue: String) {
     transaction {
         when {
-            password.isEmpty() && newValue.isNotEmpty() -> {
+            !password && newValue.isNotEmpty() -> {
                 Users.update({ Users.userName eq userName }) {
                     it[Users.userName] = newValue
                 }
             }
 
-            password.isNotEmpty() && newValue.isNotEmpty() -> {
+            password && newValue.isNotEmpty() -> {
                 Users.update({ Users.userName eq userName }) {
                     it[passwordHash] = hashPassword(newValue)
                 }
