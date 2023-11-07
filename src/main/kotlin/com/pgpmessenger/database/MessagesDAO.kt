@@ -75,8 +75,8 @@ fun getUserMessages(id: Int): List<Message> {
             val encryptedMessage: ByteArray = it[encryptedMessage].bytes
             val timeSent: LocalDateTime = it[Messages.timeSent]
             Message(
-                senderUsername,
-                receiverUserName,
+                getUserName(senderUsername).toString(),
+                getUserName(receiverUserName).toString(),
                 encryptedMessage,
                 timeSent
             )
