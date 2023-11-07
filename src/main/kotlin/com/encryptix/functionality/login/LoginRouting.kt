@@ -1,4 +1,4 @@
-package com.encryptix.functionality.messaging.login
+package com.encryptix.functionality.login
 
 import com.encryptix.database.User
 import com.encryptix.database.createUser
@@ -14,13 +14,12 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.mindrot.jbcrypt.BCrypt
 
-
 /**
  * Hash password
  *
  * @param password
  * @return
- */// Function to hash and salt the password
+ */ // Function to hash and salt the password
 fun hashPassword(password: String): String {
     return BCrypt.hashpw(password, BCrypt.gensalt())
 }
@@ -39,38 +38,36 @@ data class Signup(val userName: String, val password: String)
  *
  */
 fun Application.configureLogin() {
-
-
     // Route for user login with Basic Auth
-
 
     routing {
         authenticate("basic") {
             post("/app/login") {
                 val principal = call.principal<UserIdPrincipal>() ?: error("Invalid credentials")
                 val userName = principal.name
-                val token = (CreateJWT(
-                    JWTConfig(
-                        "dustyns-web-app", "https://jwt-provider-domain/", System.getenv("JWT_SECRET"),
-                        getUserId(userName), 700000
+                val token = (
+                    CreateJWT(
+                        JWTConfig(
+                            "dustyns-web-app",
+                            "https://jwt-provider-domain/",
+                            System.getenv("JWT_SECRET"),
+                            getUserId(userName),
+                            700000,
+                        ),
                     )
-                ))
+                    )
                 call.respond(mapOf("access_token" to token))
             }
-
-
         }
         post("/app/signup") {
             val signup = call.receive<Signup>()
             val user = User(signup.userName, null.toString(), signup.password)
             if (userNameAlreadyExists(signup.userName)) {
-                call.respond(HttpStatusCode.Conflict,mapOf("Response" to "This username is taken, please try another"))
+                call.respond(HttpStatusCode.Conflict, mapOf("Response" to "This username is taken, please try another"))
             } else {
                 createUser(user)
-                call.respond(HttpStatusCode.OK,mapOf("Response" to "Successfully created your account"))
+                call.respond(HttpStatusCode.OK, mapOf("Response" to "Successfully created your account"))
             }
-
         }
     }
-
 }
