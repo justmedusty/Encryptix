@@ -3,7 +3,6 @@ package com.pgpmessenger
 import com.pgpmessenger.configuration.configureRouting
 import com.pgpmessenger.functionality.encryption.encryptMessage
 import com.pgpmessenger.functionality.encryption.saveAsGPGFile
-import com.pgpmessenger.security.configureSecurity
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.client.utils.EmptyContent.status

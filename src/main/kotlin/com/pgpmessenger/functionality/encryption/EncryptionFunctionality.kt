@@ -33,11 +33,11 @@ fun encryptMessage(publicKey: String, message: String): ByteArray {
     val encryptionStream: EncryptionStream = PGPainless.encryptAndOrSign()
         .onOutputStream(outputStream)
         .withOptions(
-            ProducerOptions.signAndEncrypt(
+            ProducerOptions.encrypt(
                 EncryptionOptions()
                     .addRecipient(publicKeyObj)
                     .overrideEncryptionAlgorithm(SymmetricKeyAlgorithm.AES_192),
-                   null
+
             ).setAsciiArmor(true) // Ascii armor or not
         )
 
@@ -60,7 +60,7 @@ fun encryptMessage(publicKey: String, message: String): ByteArray {
  * @param encryptedMessage
  * @param fileName
  */
-fun saveAsGPGFile(encryptedMessage: String, fileName: String) {
+fun saveAsGPGFile(encryptedMessage: ByteArray, fileName: String) {
     val base64Decoded = Base64.getDecoder().decode(encryptedMessage)
     val file = File("$fileName.gpg")
 
