@@ -6,6 +6,7 @@ import com.pgpmessenger.database.getUserId
 import com.pgpmessenger.database.userNameAlreadyExists
 import com.pgpmessenger.security.CreateJWT
 import com.pgpmessenger.security.JWTConfig
+import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.request.*
@@ -63,10 +64,10 @@ fun Application.configureLogin() {
             val signup = call.receive<Signup>()
             val user = User(signup.userName, null.toString(), signup.password)
             if (userNameAlreadyExists(signup.userName)) {
-                call.respond(mapOf("Response" to "This username is taken, please try another"))
+                call.respond(HttpStatusCode.Conflict,mapOf("Response" to "This username is taken, please try another"))
             } else {
                 createUser(user)
-                call.respond(mapOf("Response" to "Successfully created your account"))
+                call.respond(HttpStatusCode.OK,mapOf("Response" to "Successfully created your account"))
             }
 
         }
