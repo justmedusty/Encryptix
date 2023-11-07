@@ -8,7 +8,22 @@ package com.pgpmessenger.functionality
  * @return boolean true if is valid, false if not valid
  */
 fun isValidOpenPGPPublicKey(publicKey: String): Boolean {
+    val trimmedKey = publicKey.trim() // Trim once and reuse
+
+    // Check if the key is neither null nor blank
+    if (trimmedKey.isBlank()) return false
+
     val header = "-----BEGIN PGP PUBLIC KEY BLOCK-----"
     val footer = "-----END PGP PUBLIC KEY BLOCK-----"
-    return publicKey.trim().startsWith(header) && publicKey.trim().endsWith(footer)
+
+    // Check the presence and position of the header and footer
+    val hasValidHeader = trimmedKey.startsWith(header)
+    val hasValidFooter = trimmedKey.endsWith(footer)
+
+    if (!(hasValidHeader && hasValidFooter)) return false
+
+    // Check for actual content between header and footer
+    val content = trimmedKey.substringAfter(header).substringBeforeLast(footer).trim()
+
+    return content.isNotEmpty()
 }
