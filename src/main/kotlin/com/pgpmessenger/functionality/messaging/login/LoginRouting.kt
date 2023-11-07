@@ -1,4 +1,4 @@
-package com.pgpmessenger.functionality.login
+package com.pgpmessenger.functionality.messaging.login
 
 import com.pgpmessenger.database.User
 import com.pgpmessenger.database.createUser
@@ -55,7 +55,6 @@ fun Application.configureLogin() {
                     )
                 ))
                 call.respond(mapOf("access_token" to token))
-                println(token)
             }
 
 

@@ -1,17 +1,16 @@
 package com.pgpmessenger.database
 
 import com.pgpmessenger.database.Messages.encryptedMessage
-import org.jetbrains.exposed.sql.Column
+import mu.KotlinLogging
+import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
-import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.javatime.CurrentDateTime
 import org.jetbrains.exposed.sql.javatime.datetime
-import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.statements.api.ExposedBlob
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.time.LocalDateTime
 
+val logger = KotlinLogging.logger {  }
 object Messages : Table(name = "Messages") {
     private val id: Column<Int> = integer("id").autoIncrement()
     val senderId: Column<Int> = integer("sender_id") references Users.id
@@ -68,21 +67,27 @@ data class Message(
  * @return list of messages in the Message object format
  */
 fun getUserMessages(id: Int): List<Message> {
-    return transaction {
-        Messages.select(Messages.receiverId eq id).map {
-            val senderUsername: String = it[Messages.senderId].toString()
-            val receiverUserName: String = it[Messages.receiverId].toString()
-            val encryptedMessage: ByteArray = it[encryptedMessage].bytes
-            val timeSent: LocalDateTime = it[Messages.timeSent]
-            Message(
-                getUserName(senderUsername).toString(),
-                getUserName(receiverUserName).toString(),
-                encryptedMessage,
-                timeSent
-            )
+
+    return try {
+        transaction {
+            Messages.select(Messages.receiverId eq id).map {
+                val senderUsername: String = it[Messages.senderId].toString()
+                val receiverUserName: String = it[Messages.receiverId].toString()
+                val encryptedMessage: ByteArray = it[encryptedMessage].bytes
+                val timeSent: LocalDateTime = it[Messages.timeSent]
+                Message(
+                    getUserName(senderUsername).toString(),
+                    getUserName(receiverUserName).toString(),
+                    encryptedMessage,
+                    timeSent
+                )
+
+            }
 
         }
-
+    }catch (e : Exception){
+        logger.error { "Error grabbing users $e" }
+        emptyList()
     }
 
 
@@ -90,14 +95,28 @@ fun getUserMessages(id: Int): List<Message> {
 
 fun sendMessage(senderId: Int, receiverId: Int, encryptedMessage: ByteArray, timeSent: LocalDateTime) {
 
-    transaction {
-        Messages.insert {
-            it[Messages.senderId] = senderId
-            it[Messages.receiverId] = receiverId
-            it[Messages.encryptedMessage] = ExposedBlob(encryptedMessage)
-            it[Messages.timeSent] = timeSent
+    if (userNameAlreadyExists(getUserName(senderId.toString()).toString()) && userNameAlreadyExists(getUserName(senderId.toString()).toString())) {
+        try{
+            transaction {
+                Messages.insert {
+                    it[Messages.senderId] = senderId
+                    it[Messages.receiverId] = receiverId
+                    it[Messages.encryptedMessage] = ExposedBlob(encryptedMessage)
+                    it[Messages.timeSent] = timeSent
+                }
+            }
+        }catch (e : Exception){
+            logger.error { e }
         }
+
     }
+    else {
+        logger.error { "Invalid user credentials given" }
+        throw IllegalArgumentException()
+
+    }
+
+
 }
 
 

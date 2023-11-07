@@ -37,8 +37,6 @@ dependencies {
     implementation("io.ktor:ktor-serialization-jackson-jvm")
     implementation("io.ktor:ktor-serialization-kotlinx-json-jvm")
     implementation("org.postgresql:postgresql:$postgres_version")
-    implementation("com.h2database:h2:$h2_version")
-    implementation("io.ktor:ktor-server-websockets-jvm")
     implementation("io.ktor:ktor-server-netty-jvm")
     implementation("ch.qos.logback:logback-classic:$logback_version")
     testImplementation("io.ktor:ktor-server-tests-jvm")
@@ -52,5 +50,5 @@ dependencies {
     implementation("org.pgpainless:pgpainless-core:1.6.2")
     implementation("org.bouncycastle:bcprov-jdk18on:1.72")
     implementation("org.bouncycastle:bcpg-jdk18on:1.72.2")
-    //implementation("moe.tlaster:kotlinpgp:<latest-version>")
+    implementation("io.github.microutils:kotlin-logging:3.0.5")
 }

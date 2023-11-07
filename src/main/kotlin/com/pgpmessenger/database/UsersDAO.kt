@@ -1,6 +1,6 @@
 package com.pgpmessenger.database
 
-import com.pgpmessenger.functionality.login.hashPassword
+import com.pgpmessenger.functionality.messaging.login.hashPassword
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -35,17 +35,21 @@ data class User(
  */
 
 
-
 /**
- * User name already exists
+ * Username already exists
  *
  * @param userName
  * @return
  */
 fun userNameAlreadyExists(userName: String): Boolean {
-    return transaction {
-        Users.select { Users.userName eq userName }
-            .count() > 0
+    return try {
+        transaction {
+            Users.select { Users.userName eq userName }
+                .count() > 0
+        }
+    } catch (e: Exception) {
+        logger.error { "Error checking username $e" }
+        return true
     }
 }
 
@@ -56,9 +60,14 @@ fun userNameAlreadyExists(userName: String): Boolean {
  * @return
  */
 fun publicKeyAlreadyExists(publicKey: String): Boolean {
-    return transaction {
-        Users.select { Users.publicKey eq publicKey }
-            .count() > 0
+    return try {
+        transaction {
+            Users.select { Users.publicKey eq publicKey }
+                .count() > 0
+        }
+    } catch (e: Exception) {
+        logger.error { "Error checking if public key exists $e" }
+        return true
     }
 }
 
@@ -70,10 +79,15 @@ fun publicKeyAlreadyExists(publicKey: String): Boolean {
  * @return
  *///this was a major pain in the cock to get the hashing to work
 fun verifyCredentials(userName: String, password: String): Boolean {
-    return transaction {
-        val user = Users.select { Users.userName eq userName }.singleOrNull()
-        user != null && BCrypt.checkpw(password, user[Users.passwordHash])
+    return try {
+        transaction {
+            val user = Users.select { Users.userName eq userName }.singleOrNull()
+            user != null && BCrypt.checkpw(password, user[Users.passwordHash])
 
+        }
+    } catch (e: Exception) {
+        logger.error { "Error verifying credentials $e" }
+        return false
     }
 }
 
@@ -85,20 +99,25 @@ fun verifyCredentials(userName: String, password: String): Boolean {
  * @return
  */
 fun userAndPasswordValidation(userName: String, password: String): Boolean {
-    return when {
-        password.isEmpty() && !userName.isEmpty() -> {
-            if (userNameAlreadyExists(userName)) {
-                false
-            } else userName.length in 6..45
-        }
+    return try {
+        when {
+            password.isEmpty() && userName.isNotEmpty() -> {
+                if (userNameAlreadyExists(userName)) {
+                    false
+                } else userName.length in 6..45
+            }
 
-        !password.isEmpty() && userName.isEmpty() -> {
-            password.length >= 8
-        }
+            password.isNotEmpty() && userName.isEmpty() -> {
+                password.length >= 8
+            }
 
-        else -> {
-            throw IllegalArgumentException("Unknown error")
+            else -> {
+                throw IllegalArgumentException("Unknown error")
+            }
         }
+    } catch (e: Exception) {
+        logger.error { "Error with user/pass validation $e" }
+        return false
     }
 }
 
@@ -108,16 +127,20 @@ fun userAndPasswordValidation(userName: String, password: String): Boolean {
  * @param user
  */// Functions to perform CRUD operations on Users table
 fun createUser(user: User) {
-    return transaction {
-        if (userAndPasswordValidation(user.userName, "") && userAndPasswordValidation("", user.passwordHash)) {
-            Users.insert {
-                it[userName] = user.userName
-                it[passwordHash] = hashPassword(user.passwordHash)
-            } get Users.id
+    return try {
+        transaction {
+            if (userAndPasswordValidation(user.userName, "") && userAndPasswordValidation("", user.passwordHash)) {
+                Users.insert {
+                    it[userName] = user.userName
+                    it[passwordHash] = hashPassword(user.passwordHash)
+                } get Users.id
+
+            }
+
 
         }
-
-
+    } catch (e: Exception) {
+        logger.error { "Error creating user $e" }
     }
 
 
@@ -130,13 +153,18 @@ fun createUser(user: User) {
  * @return
  */
 fun getUserId(userName: String): Int {
-    return transaction {
-        Users.select { Users.userName eq userName }.singleOrNull()?.get(Users.id)!!
+    return try {
+        transaction {
+            Users.select { Users.userName eq userName }.singleOrNull()?.get(Users.id)!!
+        }
+    } catch (e: Exception) {
+        logger.error { "Error getting userID $e" }
+        -1
     }
 }
 
 /**
- * Get user name
+ * Get username
  *
  * @param id
  * @return
@@ -144,18 +172,34 @@ fun getUserId(userName: String): Int {
 fun getUserName(id: String?): String? {
     val userId = id?.toIntOrNull() // Convert the String ID to Int or adjust the conversion based on the actual ID type
 
-    return transaction {
-        userId?.let { convertedId ->
-            Users.select { Users.id eq convertedId }.singleOrNull()?.get(Users.userName)
+    return try {
+        transaction {
+            userId?.let { convertedId ->
+                Users.select { Users.id eq convertedId }.singleOrNull()?.get(Users.userName)
+            }
         }
+    } catch (e: Exception) {
+        logger.error { "Error grabbing username $e" }
+        null
     }
 }
 
+/**
+ * Get public key
+ *
+ * @param userName
+ * @return
+ */
 fun getPublicKey(userName: String): String? {
-    return transaction {
-        val result = Users.select { Users.userName eq userName }.singleOrNull()
-        result?.get(Users.publicKey)
+    return try {
+        transaction {
+            val result = Users.select { Users.userName eq userName }.singleOrNull()
+            result?.get(Users.publicKey)
 
+        }
+    } catch (e: Exception) {
+        logger.error { "Error getting public key $e" }
+        return null
     }
 }
 
@@ -168,16 +212,21 @@ fun getPublicKey(userName: String): String? {
  * @return
  */
 fun updatePublicKey(userName: String, newPublicKey: String): Boolean {
-    if (publicKeyAlreadyExists(newPublicKey)) {
-        return false
-    } else {
-        transaction {
+    return try {
+        if (publicKeyAlreadyExists(newPublicKey)) {
+            false
+        } else {
+            transaction {
 
-            Users.update({ Users.userName eq userName }) {
-                it[publicKey] = newPublicKey
+                Users.update({ Users.userName eq userName }) {
+                    it[publicKey] = newPublicKey
+                }
             }
+            true
         }
-        return true
+    } catch (e: Exception) {
+        logger.error { "Error updating public key $e" }
+        return false
     }
 }
 
@@ -189,25 +238,30 @@ fun updatePublicKey(userName: String, newPublicKey: String): Boolean {
  * @param newValue
  */
 fun updateUserCredentials(userName: String, password: Boolean, newValue: String) {
-    transaction {
-        when {
-            !password && newValue.isNotEmpty() -> {
-                Users.update({ Users.userName eq userName }) {
-                    it[Users.userName] = newValue
+    try {
+        transaction {
+            when {
+                !password && newValue.isNotEmpty() -> {
+                    Users.update({ Users.userName eq userName }) {
+                        it[Users.userName] = newValue
+                    }
                 }
-            }
 
-            password && newValue.isNotEmpty() -> {
-                Users.update({ Users.userName eq userName }) {
-                    it[passwordHash] = hashPassword(newValue)
+                password && newValue.isNotEmpty() -> {
+                    Users.update({ Users.userName eq userName }) {
+                        it[passwordHash] = hashPassword(newValue)
+                    }
                 }
-            }
 
-            else -> {
-                throw IllegalArgumentException("An error occurred during the update")
+                else -> {
+                    throw IllegalArgumentException("An error occurred during the update")
+                }
             }
         }
+    } catch (e: Exception) {
+        logger.error { "Error updating user credentials $e" }
     }
+
 }
 
 /**
@@ -216,8 +270,12 @@ fun updateUserCredentials(userName: String, password: Boolean, newValue: String)
  * @param id
  */
 fun deleteUser(id: Int) {
-    transaction {
-        Users.deleteWhere { Users.id eq id }
+    try {
+        transaction {
+            Users.deleteWhere { Users.id eq id }
+        }
+    } catch (e: Exception) {
+        logger.error { "Error deleting user $e" }
     }
 }
 
