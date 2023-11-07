@@ -1,6 +1,5 @@
 package com.encryptix
 
-import com.encryptix.configuration.configureHTTP
 import com.encryptix.configuration.configureRouting
 import com.encryptix.configuration.configureSecurity
 import com.encryptix.configuration.configureSerialization
@@ -20,7 +19,6 @@ fun main() {
 
 fun Application.module() {
     configureSecurity()
-    configureHTTP()
     configureSerialization()
     configureDatabase()
     configureRouting()
