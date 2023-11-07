@@ -1,4 +1,4 @@
-# ktor-pgp-chat-app
+# Encryptix
 This will be an ongoing project for me to try building a messaging app that utilizes individual users pgp public keys that will be stored with their usernames in a postgres database to encrypt messaging in a way that only the recipient can decrypt. 
 
 
