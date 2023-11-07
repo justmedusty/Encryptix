@@ -7,7 +7,6 @@ import org.jetbrains.exposed.sql.Database
 import org.junit.Test
 import kotlin.test.assertNotNull
 
-
 /**
  * Application test
  *
@@ -28,15 +27,13 @@ class ApplicationTest {
 
             try {
                 Database.connect(url, driver = "org.postgresql.Driver", user = user, password = password)
-
+                val messages = getUserMessages(1)
+                saveAsGPGFile(messages[0].encryptedMessage, "testing")
+                assertNotNull(messages)
+                println(messages)
             } catch (e: Exception) {
                 println(e)
             }
-            val messages = getUserMessages(1)
-            saveAsGPGFile(messages[0].encryptedMessage, "testing")
-            assertNotNull(messages)
-            println(messages)
-
         }
     }
 }

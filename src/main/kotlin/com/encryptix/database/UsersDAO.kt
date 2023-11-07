@@ -26,14 +26,13 @@ object Users : Table(name = "Users") {
 data class User(
     val userName: String,
     val publicKey: String,
-    val passwordHash: String
+    val passwordHash: String,
 )
 
 /**
  * Configure database
  *
  */
-
 
 /**
  * Username already exists
@@ -77,13 +76,12 @@ fun publicKeyAlreadyExists(publicKey: String): Boolean {
  * @param userName
  * @param password
  * @return
- *///this was a major pain in the cock to get the hashing to work
+ */ // this was a major pain in the cock to get the hashing to work
 fun verifyCredentials(userName: String, password: String): Boolean {
     return try {
         transaction {
             val user = Users.select { Users.userName eq userName }.singleOrNull()
             user != null && BCrypt.checkpw(password, user[Users.passwordHash])
-
         }
     } catch (e: Exception) {
         logger.error { "Error verifying credentials $e" }
@@ -104,7 +102,9 @@ fun userAndPasswordValidation(userName: String, password: String): Boolean {
             password.isEmpty() && userName.isNotEmpty() -> {
                 if (userNameAlreadyExists(userName)) {
                     false
-                } else userName.length in 6..45
+                } else {
+                    userName.length in 6..45
+                }
             }
 
             password.isNotEmpty() && userName.isEmpty() -> {
@@ -125,7 +125,7 @@ fun userAndPasswordValidation(userName: String, password: String): Boolean {
  * Create user
  *
  * @param user
- */// Functions to perform CRUD operations on Users table
+ */ // Functions to perform CRUD operations on Users table
 fun createUser(user: User) {
     return try {
         transaction {
@@ -134,16 +134,11 @@ fun createUser(user: User) {
                     it[userName] = user.userName
                     it[passwordHash] = hashPassword(user.passwordHash)
                 } get Users.id
-
             }
-
-
         }
     } catch (e: Exception) {
         logger.error { "Error creating user $e" }
     }
-
-
 }
 
 /**
@@ -195,14 +190,12 @@ fun getPublicKey(userName: String): String? {
         transaction {
             val result = Users.select { Users.userName eq userName }.singleOrNull()
             result?.get(Users.publicKey)
-
         }
     } catch (e: Exception) {
         logger.error { "Error getting public key $e" }
         return null
     }
 }
-
 
 /**
  * Update public key
@@ -217,7 +210,6 @@ fun updatePublicKey(userName: String, newPublicKey: String): Boolean {
             false
         } else {
             transaction {
-
                 Users.update({ Users.userName eq userName }) {
                     it[publicKey] = newPublicKey
                 }
@@ -261,7 +253,6 @@ fun updateUserCredentials(userName: String, password: Boolean, newValue: String)
     } catch (e: Exception) {
         logger.error { "Error updating user credentials $e" }
     }
-
 }
 
 /**
@@ -278,5 +269,3 @@ fun deleteUser(id: Int) {
         logger.error { "Error deleting user $e" }
     }
 }
-
-

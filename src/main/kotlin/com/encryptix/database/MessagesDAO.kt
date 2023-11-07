@@ -2,22 +2,25 @@ package com.encryptix.database
 
 import com.encryptix.database.Messages.encryptedMessage
 import mu.KotlinLogging
-import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.javatime.CurrentDateTime
 import org.jetbrains.exposed.sql.javatime.datetime
+import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.statements.api.ExposedBlob
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.time.LocalDateTime
 
-val logger = KotlinLogging.logger {  }
+val logger = KotlinLogging.logger { }
+
 object Messages : Table(name = "Messages") {
     private val id: Column<Int> = integer("id").autoIncrement()
     val senderId: Column<Int> = integer("sender_id") references Users.id
     val receiverId: Column<Int> = integer("receiver_id") references Users.id
     val encryptedMessage: Column<ExposedBlob> = blob("encrypted_message")
     val timeSent: Column<LocalDateTime> = datetime("time_sent").defaultExpression(CurrentDateTime)
-
 
     override val primaryKey = PrimaryKey(id)
 }
@@ -35,7 +38,7 @@ data class Message(
     val senderUserName: String,
     val receiverUserName: String,
     val encryptedMessage: ByteArray,
-    val timeSent: LocalDateTime
+    val timeSent: LocalDateTime,
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -67,7 +70,6 @@ data class Message(
  * @return list of messages in the Message object format
  */
 fun getUserMessages(id: Int): List<Message> {
-
     return try {
         transaction {
             Messages.select(Messages.receiverId eq id).map {
@@ -79,24 +81,19 @@ fun getUserMessages(id: Int): List<Message> {
                     getUserName(senderUsername).toString(),
                     getUserName(receiverUserName).toString(),
                     encryptedMessage,
-                    timeSent
+                    timeSent,
                 )
-
             }
-
         }
-    }catch (e : Exception){
+    } catch (e: Exception) {
         logger.error { "Error grabbing users $e" }
         emptyList()
     }
-
-
 }
 
 fun sendMessage(senderId: Int, receiverId: Int, encryptedMessage: ByteArray, timeSent: LocalDateTime) {
-
     if (userNameAlreadyExists(getUserName(senderId.toString()).toString()) && userNameAlreadyExists(getUserName(senderId.toString()).toString())) {
-        try{
+        try {
             transaction {
                 Messages.insert {
                     it[Messages.senderId] = senderId
@@ -105,21 +102,11 @@ fun sendMessage(senderId: Int, receiverId: Int, encryptedMessage: ByteArray, tim
                     it[Messages.timeSent] = timeSent
                 }
             }
-        }catch (e : Exception){
+        } catch (e: Exception) {
             logger.error { e }
         }
-
-    }
-    else {
+    } else {
         logger.error { "Invalid user credentials given" }
         throw IllegalArgumentException()
-
     }
-
-
 }
-
-
-
-
-
