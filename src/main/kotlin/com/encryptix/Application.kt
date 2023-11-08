@@ -8,6 +8,7 @@ import com.encryptix.routing.key_managment.configureKeyManagementRouting
 import com.encryptix.routing.login.configureLogin
 import com.encryptix.routing.messaging.configureMessageRoutes
 import com.encryptix.routing.profile_changes.configureProfileChangeRoutes
+import com.encryptix.routing.username_fetching.configureUsernameFetching
 import configureDatabase
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
@@ -27,4 +28,5 @@ fun Application.module() {
     configureMessageRoutes()
     configureKeyManagementRouting()
     configureRateLimiting()
+    configureUsernameFetching()
 }

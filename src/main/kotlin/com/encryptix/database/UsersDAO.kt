@@ -43,8 +43,7 @@ data class User(
 fun userNameAlreadyExists(userName: String): Boolean {
     return try {
         transaction {
-            Users.select { Users.userName eq userName }
-                .count() > 0
+            Users.select { Users.userName eq userName }.count() > 0
         }
     } catch (e: Exception) {
         logger.error { "Error checking username $e" }
@@ -61,8 +60,7 @@ fun userNameAlreadyExists(userName: String): Boolean {
 fun publicKeyAlreadyExists(publicKey: String): Boolean {
     return try {
         transaction {
-            Users.select { Users.publicKey eq publicKey }
-                .count() > 0
+            Users.select { Users.publicKey eq publicKey }.count() > 0
         }
     } catch (e: Exception) {
         logger.error { "Error checking if public key exists $e" }
@@ -281,5 +279,33 @@ fun deleteUser(id: Int) {
         }
     } catch (e: Exception) {
         logger.error { "Error deleting user $e" }
+    }
+}
+
+fun fetchAllUsers(page: Int, limit: Int): List<String> {
+    val offset: Long = ((page - 1) * limit).toLong()
+    return try {
+        transaction {
+            Users.slice(Users.userName).selectAll().limit(limit, offset).map { it[Users.userName] }
+
+        }
+    } catch (e: Exception) {
+        logger.error { "Error occurred fetching users $e" }
+        emptyList()
+    }
+}
+
+fun searchAllUsers(query: String, page: Int, limit: Int): List<String> {
+    return try {
+        val offset = (page - 1) * limit
+        transaction {
+            Users.slice(Users.userName).select { Users.userName like "%$query%" }.limit(
+                limit, offset.toLong()
+            ).map { it[Users.userName] }
+
+        }
+    } catch (e: Exception) {
+        logger.error { "Error during search for users $e " }
+        emptyList()
     }
 }
