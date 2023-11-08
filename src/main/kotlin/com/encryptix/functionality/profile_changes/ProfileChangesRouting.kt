@@ -1,7 +1,9 @@
 package com.encryptix.functionality.profile_changes
 
-import com.encryptix.database.*
-import com.encryptix.functionality.isValidOpenPGPPublicKey
+import com.encryptix.database.deleteUser
+import com.encryptix.database.getUserName
+import com.encryptix.database.updateUserCredentials
+import com.encryptix.database.userAndPasswordValidation
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -18,20 +20,6 @@ fun Application.configureProfileChangeRoutes() {
 
     routing {
         authenticate("jwt") {
-            post("/app/key/upload") {
-                val postParams = call.receiveParameters()
-                val key = postParams["publicKey"] ?: error("No key provided")
-                val principal = call.principal<JWTPrincipal>()
-                val username = getUserName(principal?.payload?.subject)
-                if (isValidOpenPGPPublicKey(key)) {
-                    val success: Boolean = updatePublicKey(username.toString(), key)
-                    if (success) {
-                        call.respond(HttpStatusCode.OK, mapOf("Response" to "Public Key Successfully Created"))
-                    } else {
-                        call.respond(HttpStatusCode.Conflict, mapOf("Response" to "Public Key Already Exists"))
-                    }
-                }
-            }
             post("/app/profile/changeUserName") {
                 val postParams = call.receiveParameters()
                 val newUserName = postParams["newUser"] ?: error("No new value provided")
@@ -88,18 +76,7 @@ fun Application.configureProfileChangeRoutes() {
                     call.respond(HttpStatusCode.Conflict, mapOf("Response" to "No Id Found"))
                 }
             }
-            get("/app/key/getMyPublicKey") {
-                val principal = call.principal<JWTPrincipal>()
-                val id = principal?.payload?.subject
 
-                val userId = id?.toIntOrNull()
-                if (userId != null) {
-                    val publicKey = getPublicKey(getUserName(userId.toString()).toString())
-                    call.respond(HttpStatusCode.OK, mapOf("Response" to "$publicKey"))
-                } else {
-                    call.respond(HttpStatusCode.Conflict, mapOf("Response" to "No Id Found"))
-                }
-            }
 
         }
     }

@@ -3,6 +3,7 @@ package com.encryptix
 import com.encryptix.configuration.configureRouting
 import com.encryptix.configuration.configureSecurity
 import com.encryptix.configuration.configureSerialization
+import com.encryptix.functionality.key_managment.configureKeyManagementRouting
 import com.encryptix.functionality.login.configureLogin
 import com.encryptix.functionality.messaging.configureMessageRoutes
 import com.encryptix.functionality.profile_changes.configureProfileChangeRoutes
@@ -23,4 +24,5 @@ fun Application.module() {
     configureLogin()
     configureProfileChangeRoutes()
     configureMessageRoutes()
+    configureKeyManagementRouting()
 }

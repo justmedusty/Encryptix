@@ -222,6 +222,20 @@ fun updatePublicKey(userName: String, newPublicKey: String): Boolean {
     }
 }
 
+fun deletePublicKey(id: Int): Boolean {
+    return try {
+        transaction {
+            Users.update({ Users.id eq id }) {
+                it[publicKey] = null
+            }
+        }
+        true
+    } catch (e: Exception) {
+        logger.error { "Error deleting public key $e" }
+        false
+    }
+}
+
 /**
  * Update user credentials
  *
