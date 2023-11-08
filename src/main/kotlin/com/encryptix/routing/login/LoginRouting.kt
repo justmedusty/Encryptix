@@ -48,7 +48,7 @@ fun Application.configureLogin() {
                 val token = (
                     CreateJWT(
                         JWTConfig(
-                            "dustyns-web-app",
+                            "encryptix-user",
                             "https://jwt-provider-domain/",
                             System.getenv("JWT_SECRET"),
                             getUserId(userName),

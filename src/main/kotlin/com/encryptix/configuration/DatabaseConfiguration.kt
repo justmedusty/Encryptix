@@ -25,7 +25,5 @@ fun Application.configureDatabase() {
 
     transaction {
         SchemaUtils.create(Users, Messages)
-        //dont really need this but fuck it for now
-        addLogger(StdOutSqlLogger)
     }
 }
