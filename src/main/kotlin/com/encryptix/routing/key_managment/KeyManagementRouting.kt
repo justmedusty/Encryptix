@@ -1,4 +1,4 @@
-package com.encryptix.functionality.key_managment
+package com.encryptix.routing.key_managment
 
 import com.encryptix.database.deletePublicKey
 import com.encryptix.database.getPublicKey

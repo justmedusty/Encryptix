@@ -1,4 +1,4 @@
-package com.encryptix.functionality.login
+package com.encryptix.routing.login
 
 import com.encryptix.database.User
 import com.encryptix.database.createUser

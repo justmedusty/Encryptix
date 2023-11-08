@@ -1,6 +1,6 @@
 package com.encryptix.database
 
-import com.encryptix.functionality.login.hashPassword
+import com.encryptix.routing.login.hashPassword
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.transactions.transaction

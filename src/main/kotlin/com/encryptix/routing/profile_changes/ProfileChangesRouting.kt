@@ -1,4 +1,4 @@
-package com.encryptix.functionality.profile_changes
+package com.encryptix.routing.profile_changes
 
 import com.encryptix.database.deleteUser
 import com.encryptix.database.getUserName

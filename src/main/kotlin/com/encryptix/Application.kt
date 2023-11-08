@@ -3,10 +3,10 @@ package com.encryptix
 import com.encryptix.configuration.configureRouting
 import com.encryptix.configuration.configureSecurity
 import com.encryptix.configuration.configureSerialization
-import com.encryptix.functionality.key_managment.configureKeyManagementRouting
-import com.encryptix.functionality.login.configureLogin
-import com.encryptix.functionality.messaging.configureMessageRoutes
-import com.encryptix.functionality.profile_changes.configureProfileChangeRoutes
+import com.encryptix.routing.key_managment.configureKeyManagementRouting
+import com.encryptix.routing.login.configureLogin
+import com.encryptix.routing.messaging.configureMessageRoutes
+import com.encryptix.routing.profile_changes.configureProfileChangeRoutes
 import configureDatabase
 import io.ktor.server.application.*
 import io.ktor.server.engine.*

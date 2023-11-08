@@ -1,4 +1,4 @@
-package com.encryptix.functionality.messaging
+package com.encryptix.routing.messaging
 
 import com.encryptix.database.*
 import com.encryptix.functionality.encryption.encryptMessage
@@ -25,8 +25,9 @@ fun Application.configureMessageRoutes() {
                 val receiver = postParams["receiver"] ?: error("No receiver provided")
                 val principal = this.call.principal<JWTPrincipal>()
                 val id = principal?.payload?.subject
-                val publicKey : String = getPublicKey(getUserName(id).toString()).toString()
-                if (userNameAlreadyExists(receiver) && publicKey.isNotEmpty()) {
+                val senderPublicKey : String = getPublicKey(getUserName(id).toString()).toString()
+                val receiverPublicKey : String = getPublicKey(receiver.toString()).toString()
+                if (userNameAlreadyExists(receiver) && senderPublicKey.isNotEmpty() && receiverPublicKey.isNotEmpty()) {
                     if (id != null) {
                         sendMessage(
                             id.toInt(),
@@ -36,7 +37,7 @@ fun Application.configureMessageRoutes() {
                         )
                         call.respond(HttpStatusCode.OK, mapOf("Response" to "Message Sent"))
                     } else {
-                        call.respond(HttpStatusCode.Conflict, mapOf("Response" to "Error occurred, Check that you have a key uploaded"))
+                        call.respond(HttpStatusCode.Conflict, mapOf("Response" to "Error occurred, Check that you AND the recipient have a key uploaded"))
                     }
 
                 } else {
