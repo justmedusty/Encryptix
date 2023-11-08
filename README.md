@@ -10,5 +10,5 @@ List of endpoints for visualization:
 
 
 
-![image](https://github.com/justmedusty/Encryptix/assets/87884059/9c263f5d-442b-41fc-8771-e0d90e3cc8b4)
+![image](https://github.com/justmedusty/Encryptix/assets/87884059/f3bdc3ce-77f1-45c9-819b-163b899a1e1b)
 
