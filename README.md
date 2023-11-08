@@ -9,6 +9,6 @@ are the top priorities behind the thought process. I can't decrypt it, if someon
 List of endpoints for visualization:
 
 
+![image](https://github.com/justmedusty/Encryptix/assets/87884059/d748cdf3-83fd-4650-b01f-4fba81f34289)
 
-![image](https://github.com/justmedusty/Encryptix/assets/87884059/56e77947-d5f7-44e8-b723-c0ebd9ef6a8a)
 
