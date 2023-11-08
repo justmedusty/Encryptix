@@ -1,5 +1,6 @@
 package com.encryptix
 
+import com.encryptix.configuration.configureRateLimiting
 import com.encryptix.configuration.configureRouting
 import com.encryptix.configuration.configureSecurity
 import com.encryptix.configuration.configureSerialization
@@ -25,4 +26,5 @@ fun Application.module() {
     configureProfileChangeRoutes()
     configureMessageRoutes()
     configureKeyManagementRouting()
+    configureRateLimiting()
 }

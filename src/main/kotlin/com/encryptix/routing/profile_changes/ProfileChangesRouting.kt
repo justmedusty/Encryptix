@@ -1,9 +1,6 @@
 package com.encryptix.routing.profile_changes
 
-import com.encryptix.database.deleteUser
-import com.encryptix.database.getUserName
-import com.encryptix.database.updateUserCredentials
-import com.encryptix.database.userAndPasswordValidation
+import com.encryptix.database.*
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -35,6 +32,7 @@ fun Application.configureProfileChangeRoutes() {
                     try {
                         updateUserCredentials(getUserName(id).toString(), false, newUserName)
                         call.respond(HttpStatusCode.OK, mapOf("Response" to "Username updated successfully"))
+                        logger.info { "user with id : $id changed userName to $newUserName" }
                     } catch (e: IllegalArgumentException) {
                         call.respond(HttpStatusCode.BadRequest, mapOf("Response" to e.message))
                     }
@@ -61,6 +59,7 @@ fun Application.configureProfileChangeRoutes() {
                         call.respond(HttpStatusCode.OK, mapOf("Response" to "Password updated successfully"))
                     } catch (e: IllegalArgumentException) {
                         call.respond(HttpStatusCode.BadRequest, mapOf("Response" to e.message))
+                        logger.info { "user with id : $id changed their password" }
                     }
                 }
             }
@@ -72,6 +71,7 @@ fun Application.configureProfileChangeRoutes() {
                 if (userId != null) {
                     deleteUser(userId)
                     call.respond(HttpStatusCode.OK, mapOf("Response" to "Account Deleted"))
+                    logger.info { "user with id : $id deleted account" }
                 } else {
                     call.respond(HttpStatusCode.Conflict, mapOf("Response" to "No Id Found"))
                 }
