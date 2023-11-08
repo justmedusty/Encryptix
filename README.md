@@ -6,4 +6,6 @@ gpg file which will then be able to be downloaded to their host device on the fr
 the application , nor anyone else except the recipient , can decrypt messages sent over this service. Privacy and security 
 are the top priorities behind the thought process. I can't decrypt it, if someone got access to the database they could not decrypt anything either.
 
-![image](https://github.com/justmedusty/Encryptix/assets/87884059/00e43e1f-ac0e-4648-aff0-484903995cc5)
+List of endpoints for visualization:
+![image](https://github.com/justmedusty/Encryptix/assets/87884059/9c263f5d-442b-41fc-8771-e0d90e3cc8b4)
+
