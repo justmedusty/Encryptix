@@ -76,16 +76,16 @@ fun Application.configureProfileChangeRoutes() {
                     }
                 }
             }
-            post("/app/profile/deleteAccount") {
+            delete("/app/profile/deleteAccount") {
                 val principal = call.principal<JWTPrincipal>()
                 val id = principal?.payload?.subject
 
                 val userId = id?.toIntOrNull()
                 if (userId != null) {
                     deleteUser(userId)
-                    call.respond(HttpStatusCode.OK,mapOf("Response" to "Account Deleted"))
+                    call.respond(HttpStatusCode.OK, mapOf("Response" to "Account Deleted"))
                 } else {
-                    call.respond(HttpStatusCode.Conflict,mapOf("Response" to "No Id Found"))
+                    call.respond(HttpStatusCode.Conflict, mapOf("Response" to "No Id Found"))
                 }
             }
             get("/app/key/getMyPublicKey") {
@@ -95,9 +95,9 @@ fun Application.configureProfileChangeRoutes() {
                 val userId = id?.toIntOrNull()
                 if (userId != null) {
                     val publicKey = getPublicKey(getUserName(userId.toString()).toString())
-                    call.respond(HttpStatusCode.OK,mapOf("Response" to "$publicKey"))
+                    call.respond(HttpStatusCode.OK, mapOf("Response" to "$publicKey"))
                 } else {
-                    call.respond(HttpStatusCode.Conflict,mapOf("Response" to "No Id Found"))
+                    call.respond(HttpStatusCode.Conflict, mapOf("Response" to "No Id Found"))
                 }
             }
 
