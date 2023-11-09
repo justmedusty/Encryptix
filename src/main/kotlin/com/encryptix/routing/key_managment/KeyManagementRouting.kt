@@ -16,7 +16,7 @@ fun Application.configureKeyManagementRouting() {
         authenticate("jwt") {
             post("/app/key/upload") {
                 val postParams = call.receiveParameters()
-                val key = postParams["publicKey"] ?: error("No key provided")
+                val key: String = postParams["publicKey"] ?: ""
                 val principal = call.principal<JWTPrincipal>()
                 val username = getUserName(principal?.payload?.subject)
                 if (isValidOpenPGPPublicKey(key)) {
@@ -26,8 +26,7 @@ fun Application.configureKeyManagementRouting() {
                     } else {
                         call.respond(HttpStatusCode.Conflict, mapOf("Response" to "Public Key Already Exists"))
                     }
-                }
-                else{
+                } else {
                     call.respond(HttpStatusCode.Conflict, mapOf("Response" to "Public key is not valid"))
                 }
             }
