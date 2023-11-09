@@ -27,6 +27,9 @@ fun Application.configureKeyManagementRouting() {
                         call.respond(HttpStatusCode.Conflict, mapOf("Response" to "Public Key Already Exists"))
                     }
                 }
+                else{
+                    call.respond(HttpStatusCode.Conflict, mapOf("Response" to "Public key is not valid"))
+                }
             }
             get("/app/key/getMyPublicKey") {
                 val principal = call.principal<JWTPrincipal>()

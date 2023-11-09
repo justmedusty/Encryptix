@@ -69,7 +69,7 @@ fun Application.configureMessageRoutes() {
                     call.respond(HttpStatusCode.Conflict, mapOf("Response" to "No Id Found"))
                 }
             }
-            get("/app/messages/fetch") {
+            get("/app/messages/fetchByUser") {
                 val principal = call.principal<JWTPrincipal>()
                 val requesterId = principal?.subject?.toInt()
                 val requestedUsername = call.request.queryParameters["userName"] ?: ""
