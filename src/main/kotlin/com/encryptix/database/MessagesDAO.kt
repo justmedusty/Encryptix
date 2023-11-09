@@ -69,21 +69,23 @@ data class Message(
  * @param id
  * @return list of messages in the Message object format
  */
-fun getUserMessages(id: Int): List<Message> {
+fun getUserMessages(id: Int, page: Int, limit: Int): List<Message> {
+    val offset = (page - 1) * limit
     return try {
         transaction {
-            Messages.select(Messages.receiverId eq id).map {
-                val senderUsername: String = it[Messages.senderId].toString()
-                val receiverUserName: String = it[Messages.receiverId].toString()
-                val encryptedMessage: ByteArray = it[encryptedMessage].bytes
-                val timeSent: LocalDateTime = it[Messages.timeSent]
-                Message(
-                    getUserName(senderUsername).toString(),
-                    getUserName(receiverUserName).toString(),
-                    encryptedMessage,
-                    timeSent,
-                )
-            }
+            Messages.select(Messages.receiverId eq id)
+                .limit(page, offset.toLong()).map {
+                    val senderUsername: String = it[Messages.senderId].toString()
+                    val receiverUserName: String = it[Messages.receiverId].toString()
+                    val encryptedMessage: ByteArray = it[encryptedMessage].bytes
+                    val timeSent: LocalDateTime = it[Messages.timeSent]
+                    Message(
+                        getUserName(senderUsername).toString(),
+                        getUserName(receiverUserName).toString(),
+                        encryptedMessage,
+                        timeSent,
+                    )
+                }
         }
     } catch (e: Exception) {
         logger.error { "Error grabbing users $e" }

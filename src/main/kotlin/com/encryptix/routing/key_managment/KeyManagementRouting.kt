@@ -1,9 +1,6 @@
 package com.encryptix.routing.key_managment
 
-import com.encryptix.database.deletePublicKey
-import com.encryptix.database.getPublicKey
-import com.encryptix.database.getUserName
-import com.encryptix.database.updatePublicKey
+import com.encryptix.database.*
 import com.encryptix.functionality.isValidOpenPGPPublicKey
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -50,6 +47,7 @@ fun Application.configureKeyManagementRouting() {
                 val userId = id?.toIntOrNull()
                 if (userId != null && deletePublicKey(userId)) {
                     call.respond(HttpStatusCode.OK, mapOf("Response" to "Successfully deleted your public key"))
+                    logger.info { "User with id $userId has deleted their public key" }
                 } else {
                     call.respond(HttpStatusCode.Conflict, mapOf("Response" to "No Id Found/ Error Occurred"))
                 }

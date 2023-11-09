@@ -25,8 +25,8 @@ fun Application.configureMessageRoutes() {
                 val receiver = postParams["receiver"] ?: error("No receiver provided")
                 val principal = this.call.principal<JWTPrincipal>()
                 val id = principal?.payload?.subject
-                val senderPublicKey : String = getPublicKey(getUserName(id).toString()).toString()
-                val receiverPublicKey : String = getPublicKey(receiver.toString()).toString()
+                val senderPublicKey: String = getPublicKey(getUserName(id).toString()).toString()
+                val receiverPublicKey: String = getPublicKey(receiver.toString()).toString()
                 if (userNameAlreadyExists(receiver) && senderPublicKey.isNotEmpty() && receiverPublicKey.isNotEmpty()) {
                     if (id != null) {
                         sendMessage(
@@ -37,7 +37,10 @@ fun Application.configureMessageRoutes() {
                         )
                         call.respond(HttpStatusCode.OK, mapOf("Response" to "Message Sent"))
                     } else {
-                        call.respond(HttpStatusCode.Conflict, mapOf("Response" to "Error occurred, Check that you AND the recipient have a key uploaded"))
+                        call.respond(
+                            HttpStatusCode.Conflict,
+                            mapOf("Response" to "Error occurred, Check that you AND the recipient have a key uploaded")
+                        )
                     }
 
                 } else {
@@ -49,11 +52,19 @@ fun Application.configureMessageRoutes() {
             get("/app/messages/fetch") {
                 val principal = call.principal<JWTPrincipal>()
                 val id = principal?.payload?.subject
+                val page = call.request.queryParameters["page"]?.toIntOrNull() ?: 1
+                val limit = call.request.queryParameters["limit"]?.toIntOrNull() ?: 25
 
                 val userId = id?.toIntOrNull()
                 if (userId != null) {
-                    val messages: List<Message> = getUserMessages(userId)
-                    call.respond(HttpStatusCode.OK, mapOf("Messages" to "$messages"))
+                    val messages: List<Message> = getUserMessages(userId, page, limit)
+                    call.respond(
+                        HttpStatusCode.OK, mapOf(
+                            "Page" to page,
+                            "Limit" to limit,
+                            "Messages" to "$messages"
+                        )
+                    )
                 } else {
                     call.respond(HttpStatusCode.Conflict, mapOf("Response" to "No Id Found"))
                 }
