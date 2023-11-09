@@ -13,7 +13,6 @@ import java.io.File
 import java.io.FileOutputStream
 import java.util.*
 
-
 /**
  * Encrypt message
  *
@@ -36,7 +35,7 @@ fun encryptMessage(publicKey: String, message: String): ByteArray {
                     .addRecipient(publicKeyObj)
                     .overrideEncryptionAlgorithm(SymmetricKeyAlgorithm.AES_192),
 
-            ).setAsciiArmor(true) // Ascii armor or not
+            ).setAsciiArmor(true), // Ascii armor or not
         )
 
     Streams.pipeAll(plaintextInputStream, encryptionStream)
@@ -47,10 +46,8 @@ fun encryptMessage(publicKey: String, message: String): ByteArray {
     // Information about the encryption (algorithms, detached signatures etc.)
     val encryptedMessage = Base64.getEncoder().encodeToString(outputStream.toByteArray())
 
-
     return encryptedMessage.toByteArray()
 }
-
 
 /**
  * Save as g p g file

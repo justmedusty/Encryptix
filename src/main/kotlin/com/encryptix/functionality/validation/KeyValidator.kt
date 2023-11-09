@@ -1,5 +1,4 @@
-package com.encryptix.functionality
-
+package com.encryptix.functionality.validation
 
 /**
  * Is valid open p g p public key

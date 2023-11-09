@@ -121,7 +121,6 @@ fun getUserMessagesByUserName(id: Int, senderUserName: String, page: Int, limit:
     }
 }
 
-
 fun sendMessage(senderId: Int, receiverId: Int, encryptedMessage: ByteArray, timeSent: LocalDateTime) {
     if (userNameAlreadyExists(getUserName(senderId.toString()).toString()) && userNameAlreadyExists(getUserName(senderId.toString()).toString())) {
         try {

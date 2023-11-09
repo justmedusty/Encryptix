@@ -1,4 +1,4 @@
-package com.encryptix.routing.profile_changes
+package com.encryptix.routing.profileChanges
 
 import com.encryptix.database.*
 import io.ktor.http.*
@@ -14,7 +14,6 @@ import io.ktor.server.routing.*
  *
  */
 fun Application.configureProfileChangeRoutes() {
-
     routing {
         authenticate("jwt") {
             post("/app/profile/changeUserName") {
@@ -26,7 +25,7 @@ fun Application.configureProfileChangeRoutes() {
                 if (newUserName.isEmpty() || !userAndPasswordValidation(newUserName, "")) {
                     call.respond(
                         HttpStatusCode.BadRequest,
-                        mapOf("Response" to "Please provide a valid username. Must be between 6 and 45 characters and be unique")
+                        mapOf("Response" to "Please provide a valid username. Must be between 6 and 45 characters and be unique"),
                     )
                 } else {
                     try {
@@ -47,14 +46,14 @@ fun Application.configureProfileChangeRoutes() {
                 if (newPassword.isEmpty() || !userAndPasswordValidation("", newPassword)) {
                     call.respond(
                         HttpStatusCode.BadRequest,
-                        mapOf("Response" to "Please provide a valid password. Must be at least 8 characters")
+                        mapOf("Response" to "Please provide a valid password. Must be at least 8 characters"),
                     )
                 } else {
                     try {
                         updateUserCredentials(
                             getUserName(id).toString(),
                             true,
-                            newPassword
+                            newPassword,
                         )
                         call.respond(HttpStatusCode.OK, mapOf("Response" to "Password updated successfully"))
                     } catch (e: IllegalArgumentException) {
@@ -76,9 +75,6 @@ fun Application.configureProfileChangeRoutes() {
                     call.respond(HttpStatusCode.Conflict, mapOf("Response" to "No Id Found"))
                 }
             }
-
-
         }
     }
 }
-

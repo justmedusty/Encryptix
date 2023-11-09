@@ -287,7 +287,6 @@ fun fetchAllUsers(page: Int, limit: Int): List<String> {
     return try {
         transaction {
             Users.slice(Users.userName).selectAll().limit(limit, offset).map { it[Users.userName] }
-
         }
     } catch (e: Exception) {
         logger.error { "Error occurred fetching users $e" }
@@ -300,9 +299,9 @@ fun searchAllUsers(query: String, page: Int, limit: Int): List<String> {
         val offset = (page - 1) * limit
         transaction {
             Users.slice(Users.userName).select { Users.userName like "%$query%" }.limit(
-                limit, offset.toLong()
+                limit,
+                offset.toLong(),
             ).map { it[Users.userName] }
-
         }
     } catch (e: Exception) {
         logger.error { "Error during search for users $e " }

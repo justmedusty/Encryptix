@@ -1,4 +1,4 @@
-package com.encryptix.routing.username_fetching
+package com.encryptix.routing.usernameFetching
 
 import com.encryptix.database.fetchAllUsers
 import com.encryptix.database.searchAllUsers
@@ -9,7 +9,6 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
 fun Application.configureUsernameFetching() {
-
     routing {
         authenticate("jwt") {
             get("/app/users/fetch") {
@@ -20,8 +19,8 @@ fun Application.configureUsernameFetching() {
                     mapOf(
                         "page" to page,
                         "limit" to limit,
-                        "users" to users
-                    )
+                        "users" to users,
+                    ),
                 )
             }
             get("/app/users/search") {
@@ -30,9 +29,10 @@ fun Application.configureUsernameFetching() {
                 val query: String? = call.request.queryParameters["query"]
                 if (query.isNullOrEmpty()) {
                     call.respond(
-                        HttpStatusCode.BadRequest, mapOf(
-                            "response" to "Query cannot be empty"
-                        )
+                        HttpStatusCode.BadRequest,
+                        mapOf(
+                            "response" to "Query cannot be empty",
+                        ),
                     )
                 } else {
                     val results: List<String> = searchAllUsers(query, page, limit)
@@ -41,8 +41,8 @@ fun Application.configureUsernameFetching() {
                             "page" to page,
                             "query" to query,
                             "limit" to limit,
-                            "users" to results
-                        )
+                            "users" to results,
+                        ),
                     )
                 }
             }

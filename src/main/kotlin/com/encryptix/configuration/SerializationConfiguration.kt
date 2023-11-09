@@ -12,7 +12,6 @@ fun Application.configureSerialization() {
         jackson {
             enable(SerializationFeature.INDENT_OUTPUT)
             registerModule(JavaTimeModule())
-
         }
         json()
     }

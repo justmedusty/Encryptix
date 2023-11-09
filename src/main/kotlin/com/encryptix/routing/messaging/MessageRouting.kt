@@ -16,7 +16,6 @@ import java.time.LocalDateTime
  *
  */
 fun Application.configureMessageRoutes() {
-
     routing {
         authenticate("jwt") {
             post("/app/messages/send") {
@@ -33,21 +32,19 @@ fun Application.configureMessageRoutes() {
                             id.toInt(),
                             getUserId(receiver),
                             encryptMessage(getPublicKey(receiver).toString(), message),
-                            LocalDateTime.now()
+                            LocalDateTime.now(),
                         )
                         call.respond(HttpStatusCode.OK, mapOf("Response" to "Message Sent"))
                     } else {
                         call.respond(
                             HttpStatusCode.Conflict,
-                            mapOf("Response" to "Error occurred, Check that you AND the recipient have a key uploaded")
+                            mapOf("Response" to "Error occurred, Check that you AND the recipient have a key uploaded"),
                         )
                     }
-
                 } else {
                     call.respond(HttpStatusCode.Conflict, mapOf("Response" to "User does not exist"))
                 }
             }
-
 
             get("/app/messages/fetchAll") {
                 val principal = call.principal<JWTPrincipal>()
@@ -59,11 +56,12 @@ fun Application.configureMessageRoutes() {
                 if (userId != null) {
                     val messages: List<Message> = getAllUserMessages(userId, page, limit)
                     call.respond(
-                        HttpStatusCode.OK, mapOf(
+                        HttpStatusCode.OK,
+                        mapOf(
                             "Page" to page,
                             "Limit" to limit,
-                            "Messages" to messages
-                        )
+                            "Messages" to messages,
+                        ),
                     )
                 } else {
                     call.respond(HttpStatusCode.Conflict, mapOf("Response" to "No Id Found"))
@@ -83,19 +81,16 @@ fun Application.configureMessageRoutes() {
                         mapOf(
                             "Page" to page,
                             "Limit" to limit,
-                            "Messages" to messages
-                        )
+                            "Messages" to messages,
+                        ),
                     )
                 } else {
                     call.respond(
                         HttpStatusCode.BadRequest,
-                        mapOf("Response" to "An error occurred , please make sure the user you want to send a message to exists and is spelled properly")
+                        mapOf("Response" to "An error occurred , please make sure the user you want to send a message to exists and is spelled properly"),
                     )
                 }
-
-
             }
-
         }
     }
 }

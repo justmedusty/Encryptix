@@ -4,8 +4,8 @@ import com.encryptix.database.User
 import com.encryptix.database.createUser
 import com.encryptix.database.getUserId
 import com.encryptix.database.userNameAlreadyExists
-import com.encryptix.security.CreateJWT
 import com.encryptix.security.JWTConfig
+import com.encryptix.security.createJWT
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -46,7 +46,7 @@ fun Application.configureLogin() {
                 val principal = call.principal<UserIdPrincipal>() ?: error("Invalid credentials")
                 val userName = principal.name
                 val token = (
-                    CreateJWT(
+                    createJWT(
                         JWTConfig(
                             "encryptix-user",
                             "https://jwt-provider-domain/",

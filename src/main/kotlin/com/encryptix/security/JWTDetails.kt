@@ -19,7 +19,7 @@ data class JWTConfig(
     val domain: String,
     val secret: String,
     val id: Int,
-    val expiresInMS: Long
+    val expiresInMS: Long,
 )
 
 /**
@@ -28,7 +28,7 @@ data class JWTConfig(
  * @param jwtConfig
  * @return
  */
-fun CreateJWT(jwtConfig: JWTConfig): String {
+fun createJWT(jwtConfig: JWTConfig): String {
     return JWT.create()
         .withAudience(jwtConfig.audience)
         .withIssuer(jwtConfig.domain)

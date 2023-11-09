@@ -4,11 +4,11 @@ import com.encryptix.configuration.configureRateLimiting
 import com.encryptix.configuration.configureRouting
 import com.encryptix.configuration.configureSecurity
 import com.encryptix.configuration.configureSerialization
-import com.encryptix.routing.key_managment.configureKeyManagementRouting
+import com.encryptix.routing.keyManagment.configureKeyManagementRouting
 import com.encryptix.routing.login.configureLogin
 import com.encryptix.routing.messaging.configureMessageRoutes
-import com.encryptix.routing.profile_changes.configureProfileChangeRoutes
-import com.encryptix.routing.username_fetching.configureUsernameFetching
+import com.encryptix.routing.profileChanges.configureProfileChangeRoutes
+import com.encryptix.routing.usernameFetching.configureUsernameFetching
 import configureDatabase
 import io.ktor.server.application.*
 import io.ktor.server.engine.*

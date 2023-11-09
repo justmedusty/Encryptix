@@ -3,8 +3,6 @@ import com.encryptix.database.Users
 import io.ktor.server.application.*
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
-import org.jetbrains.exposed.sql.StdOutSqlLogger
-import org.jetbrains.exposed.sql.addLogger
 import org.jetbrains.exposed.sql.transactions.transaction
 
 /**
@@ -18,7 +16,6 @@ fun Application.configureDatabase() {
 
     try {
         Database.connect(url, driver = "org.postgresql.Driver", user = user, password = password)
-
     } catch (e: Exception) {
         println(e)
     }

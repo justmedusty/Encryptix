@@ -1,7 +1,7 @@
-package com.encryptix.routing.key_managment
+package com.encryptix.routing.keyManagment
 
 import com.encryptix.database.*
-import com.encryptix.functionality.isValidOpenPGPPublicKey
+import com.encryptix.functionality.validation.isValidOpenPGPPublicKey
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -11,7 +11,6 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
 fun Application.configureKeyManagementRouting() {
-
     routing {
         authenticate("jwt") {
             post("/app/key/upload") {
@@ -54,7 +53,6 @@ fun Application.configureKeyManagementRouting() {
                     call.respond(HttpStatusCode.Conflict, mapOf("Response" to "No Id Found/ Error Occurred"))
                 }
             }
-
         }
     }
 }

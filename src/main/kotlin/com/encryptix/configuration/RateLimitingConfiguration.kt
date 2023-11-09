@@ -13,7 +13,6 @@ data class RateLimitConfig(var lastRequestTime: Long, var requestCount: Int)
 
 val rateLimitMap = ConcurrentHashMap<String, RateLimitConfig>()
 
-
 fun Application.configureRateLimiting() {
     intercept(Plugins) {
         val ip = call.request.origin.remoteHost
@@ -29,10 +28,9 @@ fun Application.configureRateLimiting() {
                 if (rateLimitInfo.requestCount > 6) {
                     call.respond(
                         HttpStatusCode.TooManyRequests,
-                        mapOf("Response" to "Too many requests, rate limit exceeded")
+                        mapOf("Response" to "Too many requests, rate limit exceeded"),
                     )
                     finish()
-
                 }
             }
         } else {
@@ -44,14 +42,11 @@ fun Application.configureRateLimiting() {
                 if (rateLimitInfo.requestCount > 60) {
                     call.respond(
                         HttpStatusCode.TooManyRequests,
-                        mapOf("Response" to "Too many requests, rate limit exceeded")
+                        mapOf("Response" to "Too many requests, rate limit exceeded"),
                     )
                     finish()
                 }
             }
-
         }
-
-
     }
 }
