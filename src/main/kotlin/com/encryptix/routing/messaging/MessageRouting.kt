@@ -26,7 +26,7 @@ fun Application.configureMessageRoutes() {
                 val principal = this.call.principal<JWTPrincipal>()
                 val id = principal?.payload?.subject
                 val senderPublicKey: String = getPublicKey(getUserName(id).toString()).toString()
-                val receiverPublicKey: String = getPublicKey(receiver.toString()).toString()
+                val receiverPublicKey: String = getPublicKey(receiver).toString()
                 if (userNameAlreadyExists(receiver) && senderPublicKey.isNotEmpty() && receiverPublicKey.isNotEmpty()) {
                     if (id != null) {
                         sendMessage(
@@ -49,7 +49,7 @@ fun Application.configureMessageRoutes() {
             }
 
 
-            get("/app/messages/fetch") {
+            get("/app/messages/fetchAll") {
                 val principal = call.principal<JWTPrincipal>()
                 val id = principal?.payload?.subject
                 val page = call.request.queryParameters["page"]?.toIntOrNull() ?: 1
@@ -57,17 +57,43 @@ fun Application.configureMessageRoutes() {
 
                 val userId = id?.toIntOrNull()
                 if (userId != null) {
-                    val messages: List<Message> = getUserMessages(userId, page, limit)
+                    val messages: List<Message> = getAllUserMessages(userId, page, limit)
                     call.respond(
                         HttpStatusCode.OK, mapOf(
                             "Page" to page,
                             "Limit" to limit,
-                            "Messages" to "$messages"
+                            "Messages" to messages
                         )
                     )
                 } else {
                     call.respond(HttpStatusCode.Conflict, mapOf("Response" to "No Id Found"))
                 }
+            }
+            get("/app/messages/fetch") {
+                val principal = call.principal<JWTPrincipal>()
+                val requesterId = principal?.subject?.toInt()
+                val requestedUsername = call.request.queryParameters["userName"] ?: ""
+                val page = call.request.queryParameters["page"]?.toIntOrNull() ?: 1
+                val limit = call.request.queryParameters["limit"]?.toIntOrNull() ?: 25
+
+                if (requestedUsername.isNotEmpty() && requesterId != null) {
+                    val messages: List<Message> = getUserMessagesByUserName(requesterId, requestedUsername, page, limit)
+                    call.respond(
+                        HttpStatusCode.OK,
+                        mapOf(
+                            "Page" to page,
+                            "Limit" to limit,
+                            "Messages" to messages
+                        )
+                    )
+                } else {
+                    call.respond(
+                        HttpStatusCode.BadRequest,
+                        mapOf("Response" to "An error occurred , please make sure the user you want to send a message to exists and is spelled properly")
+                    )
+                }
+
+
             }
 
         }

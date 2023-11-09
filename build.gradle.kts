@@ -51,4 +51,5 @@ dependencies {
     implementation("org.bouncycastle:bcprov-jdk18on:1.72")
     implementation("org.bouncycastle:bcpg-jdk18on:1.72.2")
     implementation("io.github.microutils:kotlin-logging:3.0.5")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
 }

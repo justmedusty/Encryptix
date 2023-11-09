@@ -2,13 +2,10 @@ package com.encryptix.database
 
 import com.encryptix.database.Messages.encryptedMessage
 import mu.KotlinLogging
-import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
-import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.javatime.CurrentDateTime
 import org.jetbrains.exposed.sql.javatime.datetime
-import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.statements.api.ExposedBlob
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.time.LocalDateTime
@@ -69,12 +66,14 @@ data class Message(
  * @param id
  * @return list of messages in the Message object format
  */
-fun getUserMessages(id: Int, page: Int, limit: Int): List<Message> {
+fun getAllUserMessages(id: Int, page: Int, limit: Int): List<Message> {
     val offset = (page - 1) * limit
     return try {
         transaction {
             Messages.select(Messages.receiverId eq id)
-                .limit(page, offset.toLong()).map {
+                .limit(page, offset.toLong())
+                .orderBy(Messages.timeSent, SortOrder.DESC)
+                .map {
                     val senderUsername: String = it[Messages.senderId].toString()
                     val receiverUserName: String = it[Messages.receiverId].toString()
                     val encryptedMessage: ByteArray = it[encryptedMessage].bytes
@@ -92,6 +91,36 @@ fun getUserMessages(id: Int, page: Int, limit: Int): List<Message> {
         emptyList()
     }
 }
+
+fun getUserMessagesByUserName(id: Int, senderUserName: String, page: Int, limit: Int): List<Message> {
+    val senderId: Int = getUserId(senderUserName)
+    val offset = (page - 1) * limit
+    return try {
+        transaction {
+            Messages.select {
+                (Messages.receiverId eq id) and (Messages.senderId eq senderId)
+            }
+                .limit(page, offset.toLong())
+                .orderBy(Messages.timeSent, SortOrder.DESC)
+                .map {
+                    val senderUsername: String = it[Messages.senderId].toString()
+                    val receiverUserName: String = it[Messages.receiverId].toString()
+                    val encryptedMessage: ByteArray = it[encryptedMessage].bytes
+                    val timeSent: LocalDateTime = it[Messages.timeSent]
+                    Message(
+                        getUserName(senderUsername).toString(),
+                        getUserName(receiverUserName).toString(),
+                        encryptedMessage,
+                        timeSent,
+                    )
+                }
+        }
+    } catch (e: Exception) {
+        logger.error { "Error grabbing users $e" }
+        emptyList()
+    }
+}
+
 
 fun sendMessage(senderId: Int, receiverId: Int, encryptedMessage: ByteArray, timeSent: LocalDateTime) {
     if (userNameAlreadyExists(getUserName(senderId.toString()).toString()) && userNameAlreadyExists(getUserName(senderId.toString()).toString())) {
