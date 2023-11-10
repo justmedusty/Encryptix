@@ -19,7 +19,7 @@ fun Application.configureRateLimiting() {
         val currentTime = System.currentTimeMillis()
         val rateLimitInfo = rateLimitMap.getOrPut(ip) { RateLimitConfig(currentTime, 0) }
 
-        if (call.request.uri == "/app/login") {
+        if (call.request.uri == "/app/login" || call.request.uri == "/app/signup") {
             if (currentTime - rateLimitInfo.lastRequestTime > 1.minutes.inWholeMilliseconds) {
                 rateLimitInfo.requestCount = 1
                 rateLimitInfo.lastRequestTime = currentTime
