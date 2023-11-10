@@ -6,7 +6,7 @@ val postgres_version: String by project
 val h2_version: String by project
 plugins {
     kotlin("jvm") version "1.8.0"
-    id("io.ktor.plugin") version "2.3.4"
+    id("io.ktor.plugin") version "2.3.5"
     id("org.jetbrains.kotlin.plugin.serialization") version "1.8.0"
 }
 
@@ -18,6 +18,15 @@ application {
 
     val isDevelopment: Boolean = project.ext.has("development")
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
+}
+tasks.compileTestJava {
+    targetCompatibility = "17"
+    sourceCompatibility = "17"
+}
+
+// Set Java version for Kotlin compilation tasks
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+    kotlinOptions.jvmTarget = "17"
 }
 
 repositories {
