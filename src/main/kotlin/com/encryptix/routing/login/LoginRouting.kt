@@ -62,11 +62,17 @@ fun Application.configureLogin() {
         post("/app/signup") {
             val signup = call.receive<Signup>()
             val user = User(signup.userName, null.toString(), signup.password)
-            if (userNameAlreadyExists(signup.userName)) {
-                call.respond(HttpStatusCode.Conflict, mapOf("Response" to "This username is taken, please try another"))
-            } else {
-                createUser(user)
-                call.respond(HttpStatusCode.OK, mapOf("Response" to "Successfully created your account"))
+            when {
+                user.userName.length < 6 || user.userName.length > 45 -> {
+                    call.respond(HttpStatusCode.Conflict, mapOf("Response" to "Username must be between 6 and 45 characters"))
+                }
+                userNameAlreadyExists(signup.userName) -> {
+                    call.respond(HttpStatusCode.Conflict, mapOf("Response" to "This username is taken, please try another"))
+                }
+                else -> {
+                    createUser(user)
+                    call.respond(HttpStatusCode.OK, mapOf("Response" to "Successfully created your account"))
+                }
             }
         }
     }
