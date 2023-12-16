@@ -1,7 +1,6 @@
 package com.encryptix.database
 
 import com.encryptix.database.Messages.encryptedMessage
-import kotlinx.serialization.Serializable
 import mu.KotlinLogging
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
@@ -9,7 +8,9 @@ import org.jetbrains.exposed.sql.javatime.CurrentDateTime
 import org.jetbrains.exposed.sql.javatime.datetime
 import org.jetbrains.exposed.sql.statements.api.ExposedBlob
 import org.jetbrains.exposed.sql.transactions.transaction
+import java.nio.charset.StandardCharsets
 import java.time.LocalDateTime
+import java.util.Base64
 
 val logger = KotlinLogging.logger { }
 
@@ -77,12 +78,16 @@ fun getAllUserMessages(id: Int, page: Int, limit: Int): List<Message> {
                 .map {
                     val senderUsername: String = it[Messages.senderId].toString()
                     val receiverUserName: String = it[Messages.receiverId].toString()
-                    val encryptedMessage: ByteArray = it[encryptedMessage].bytes
+
+                    // Decode Base64 to String
+                    val base64EncodedMessage: ByteArray = it[Messages.encryptedMessage].bytes
+                    val decodedMessage: String = Base64.getDecoder().decode(base64EncodedMessage).toString(StandardCharsets.UTF_8)
+
                     val timeSent: LocalDateTime = it[Messages.timeSent]
                     Message(
                         getUserName(senderUsername).toString(),
                         getUserName(receiverUserName).toString(),
-                        encryptedMessage,
+                        decodedMessage.toByteArray(),
                         timeSent,
                     )
                 }
