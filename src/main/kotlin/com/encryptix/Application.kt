@@ -31,4 +31,16 @@ fun Application.module() {
     configureKeyManagementRouting()
     configureRateLimiting()
     configureUsernameFetching()
+    install(CORS) {
+        allowMethod(HttpMethod.Options)
+        allowMethod(HttpMethod.Post)
+        allowMethod(HttpMethod.Get)
+        allowMethod(HttpMethod.Delete)
+        allowHeader(HttpHeaders.Authorization)
+        allowHeader(HttpHeaders.ContentType)
+        allowCredentials = true
+        allowHost("localhost:3000")
+        allowHost("127.0.0.1:3000")
+        allowHost("localhost:6969")
+    }
 }

@@ -1,6 +1,7 @@
 package com.encryptix.database
 
 import com.encryptix.database.Messages.encryptedMessage
+import kotlinx.serialization.Serializable
 import mu.KotlinLogging
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
@@ -71,7 +72,7 @@ fun getAllUserMessages(id: Int, page: Int, limit: Int): List<Message> {
     return try {
         transaction {
             Messages.select(Messages.receiverId eq id)
-                .limit(page, offset.toLong())
+                .limit(limit, offset.toLong())
                 .orderBy(Messages.timeSent, SortOrder.DESC)
                 .map {
                     val senderUsername: String = it[Messages.senderId].toString()
