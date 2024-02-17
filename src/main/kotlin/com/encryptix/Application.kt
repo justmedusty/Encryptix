@@ -42,5 +42,17 @@ fun Application.module() {
         allowHost("localhost:3000")
         allowHost("127.0.0.1:3000")
         allowHost("localhost:6969")
+        allowHost("192.168.2.254:3000")
+        allowHost("192.168.2.254")
+        allowHost("192.168.2.255:3000")
+        allowHost("0.0.0.0:3000")
+        allowHost("0.0.0.0")
+        allowHost("192.168.2.254:6969")
+        allowHost("192.168.2.255:6969")
+        allowHost("0.0.0.0:6969")
+        allowHost("192.168.56.1:3000")
+        allowHost("192.168.56.1:6969")
+        allowHost("192.168.56.1")
+        allowHost("192.168.2.1")
     }
 }
