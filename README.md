@@ -9,11 +9,6 @@ are the top priorities behind the thought process. I can't decrypt it, if someon
 List of endpoints for visualization:
 
 
-![image](https://github.com/justmedusty/Encryptix/assets/87884059/d748cdf3-83fd-4650-b01f-4fba81f34289)
-
-
-
-
 To build a docker image in IntelliJ you can simply click publishImageToLocalRegistry in gradle side bar
 ![image](https://github.com/justmedusty/Encryptix/assets/87884059/4220ea61-275b-4fa5-be6a-9e0d80dbfad7)
 
