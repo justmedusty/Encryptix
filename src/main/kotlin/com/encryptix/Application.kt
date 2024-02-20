@@ -17,7 +17,7 @@ import io.ktor.server.netty.*
 import io.ktor.server.plugins.cors.routing.*
 
 fun main() {
-    embeddedServer(Netty, port = 6969, host = "0.0.0.0", module = Application::module).start(wait = true)
+    embeddedServer(Netty, port = 6969, host = "0.0.0.0",module = Application::module).start(wait = true)
 }
 
 fun Application.module() {
@@ -33,26 +33,25 @@ fun Application.module() {
     configureUsernameFetching()
     install(CORS) {
         allowMethod(HttpMethod.Options)
+        //allowMethod(HttpMethod.Options)
         allowMethod(HttpMethod.Post)
         allowMethod(HttpMethod.Get)
         allowMethod(HttpMethod.Delete)
         allowHeader(HttpHeaders.Authorization)
         allowHeader(HttpHeaders.ContentType)
+        allowHeader(HttpHeaders.Accept)
+        allowHeader(HttpHeaders.AcceptLanguage)
+        allowHeader(HttpHeaders.ContentType)
+        allowHeader(HttpHeaders.AccessControlAllowCredentials)
+        allowHeader(HttpHeaders.AccessControlAllowOrigin)
+        allowSameOrigin = true
+        allowNonSimpleContentTypes = true
+        //header(HttpHeaders.AccessControlAllowHeaders,"*")
         allowCredentials = true
-        allowHost("localhost:3000")
-        allowHost("127.0.0.1:3000")
-        allowHost("localhost:6969")
-        allowHost("192.168.2.254:3000")
-        allowHost("192.168.2.254")
-        allowHost("192.168.2.255:3000")
-        allowHost("0.0.0.0:3000")
-        allowHost("0.0.0.0")
-        allowHost("192.168.2.254:6969")
-        allowHost("192.168.2.255:6969")
-        allowHost("0.0.0.0:6969")
-        allowHost("192.168.56.1:3000")
-        allowHost("192.168.56.1:6969")
-        allowHost("192.168.56.1")
-        allowHost("192.168.2.1")
+        anyHost()
+
+
     }
+
+
 }

@@ -25,7 +25,7 @@ fun Application.configureRateLimiting() {
                 rateLimitInfo.lastRequestTime = currentTime
             } else {
                 rateLimitInfo.requestCount++
-                if (rateLimitInfo.requestCount > 60) {
+                if (rateLimitInfo.requestCount > 20) {
                     call.respond(
                         HttpStatusCode.TooManyRequests,
                         mapOf("Response" to "Too many requests, rate limit exceeded"),

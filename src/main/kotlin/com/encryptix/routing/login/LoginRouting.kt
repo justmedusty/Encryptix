@@ -58,6 +58,7 @@ fun Application.configureLogin() {
                     )
                 call.respond(mapOf("access_token" to token))
             }
+
         }
         post("/app/signup") {
             val signup = call.receive<Signup>()
