@@ -33,6 +33,7 @@ fun Application.configureRateLimiting() {
                     finish()
                 }
             }
+
         } else {
             if (currentTime - rateLimitInfo.lastRequestTime > 1.minutes.inWholeMilliseconds) {
                 rateLimitInfo.requestCount = 1
