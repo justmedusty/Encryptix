@@ -5,13 +5,13 @@ val logback_version: String by project
 val postgres_version: String by project
 val h2_version: String by project
 plugins {
-    kotlin("jvm") version "1.8.20"
-    id("io.ktor.plugin") version "2.3.4"
-    id("org.jetbrains.kotlin.plugin.serialization") version "1.8.20"
+    kotlin("jvm") version "1.9.22"
+    id("io.ktor.plugin") version "2.3.8"
+    id("org.jetbrains.kotlin.plugin.serialization") version "1.9.22"
 }
 
 group = "encryptix"
-version = "0.0.1"
+version = "1.0"
 
 application {
     mainClass.set("com.encryptix.ApplicationKt")
@@ -42,14 +42,14 @@ dependencies {
     implementation("io.ktor:ktor-server-status-pages-jvm")
     implementation("io.ktor:ktor-server-openapi")
     implementation("io.ktor:ktor-server-swagger-jvm")
-    implementation("io.ktor:ktor-http:2.3.4")
+    implementation("io.ktor:ktor-http:2.3.8")
     implementation("io.ktor:ktor-server-content-negotiation-jvm")
     implementation("io.ktor:ktor-serialization-jackson-jvm")
     implementation("io.ktor:ktor-serialization-kotlinx-json-jvm")
     implementation("org.postgresql:postgresql:$postgres_version")
     implementation("io.ktor:ktor-server-netty-jvm")
     implementation("ch.qos.logback:logback-classic:$logback_version")
-    implementation("io.ktor:ktor-server-cors:2.3.4")
+    implementation("io.ktor:ktor-server-cors:2.3.8")
     testImplementation("io.ktor:ktor-server-tests-jvm")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:1.7.0")
     implementation("org.mindrot:jbcrypt:0.4")
@@ -59,7 +59,7 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-java-time:0.40.1")
     implementation("org.postgresql:postgresql:42.5.1")
     implementation("org.pgpainless:pgpainless-core:1.6.2")
-    implementation("org.bouncycastle:bcprov-jdk18on:1.72")
+    implementation("org.bouncycastle:bcprov-jdk18on:1.74")
     implementation("org.bouncycastle:bcpg-jdk18on:1.72.2")
     implementation("io.github.microutils:kotlin-logging:3.0.5")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
