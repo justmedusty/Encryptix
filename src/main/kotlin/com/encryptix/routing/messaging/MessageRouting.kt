@@ -26,6 +26,10 @@ fun Application.configureMessageRoutes() {
                 val id = principal?.payload?.subject
                 val senderPublicKey: String = getPublicKey(getUserName(id).toString()).toString()
                 val receiverPublicKey: String = getPublicKey(receiver).toString()
+
+                if (message.toByteArray().size > CheckConstraints.MESSAGE_BYTES.MAX_SIZE){
+                    call.respond(HttpStatusCode.Conflict, mapOf("Response" to "Message size exceeds the maximum limit (50mb)"))
+                }
                 if (userNameAlreadyExists(receiver) && senderPublicKey.isNotEmpty() && receiverPublicKey.isNotEmpty()) {
                     if (id != null) {
                         sendMessage(

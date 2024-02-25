@@ -18,6 +18,9 @@ fun Application.configureKeyManagementRouting() {
                 val key: String = postParams["publicKey"] ?: ""
                 val principal = call.principal<JWTPrincipal>()
                 val username = getUserName(principal?.payload?.subject)
+                if (key.length > CheckConstraints.PUBLIC_KEY_LENGTH.MAX_SIZE){
+                    call.respond(HttpStatusCode.BadRequest, mapOf("Response" to "Public key exceeds maximum size (16kb)"))
+                }
                 if (isValidOpenPGPPublicKey(key)) {
                     val success: Boolean = updatePublicKey(username.toString(), key)
                     if (success) {

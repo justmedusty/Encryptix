@@ -49,19 +49,3 @@ fun encryptMessage(publicKey: String, message: String): ByteArray {
     return encryptedMessage.toByteArray()
 }
 
-/**
- * Save as g p g file
- *
- * @param encryptedMessage
- * @param fileName
- */
-fun saveAsGPGFile(encryptedMessage: ByteArray, fileName: String) {
-    val base64Decoded = Base64.getDecoder().decode(encryptedMessage)
-    val file = File("$fileName.gpg")
-
-    val outputStream = FileOutputStream(file)
-    outputStream.write(base64Decoded)
-    outputStream.close()
-
-    println("Encrypted message saved to ${file.absolutePath}")
-}

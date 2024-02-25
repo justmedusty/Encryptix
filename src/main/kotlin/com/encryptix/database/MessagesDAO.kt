@@ -22,6 +22,7 @@ object Messages : Table(name = "Messages") {
     val timeSent: Column<LocalDateTime> = datetime("time_sent").defaultExpression(CurrentDateTime)
 
     override val primaryKey = PrimaryKey(id)
+
 }
 
 /**

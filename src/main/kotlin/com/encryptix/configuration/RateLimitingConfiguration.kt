@@ -8,6 +8,7 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Duration.Companion.seconds
 
 data class RateLimitConfig(var lastRequestTime: Long, var requestCount: Int)
 
@@ -35,12 +36,12 @@ fun Application.configureRateLimiting() {
             }
 
         } else {
-            if (currentTime - rateLimitInfo.lastRequestTime > 1.minutes.inWholeMilliseconds) {
+            if (currentTime - rateLimitInfo.lastRequestTime > 5.seconds.inWholeMilliseconds) {
                 rateLimitInfo.requestCount = 1
                 rateLimitInfo.lastRequestTime = currentTime
             } else {
                 rateLimitInfo.requestCount++
-                if (rateLimitInfo.requestCount > 1000) {
+                if (rateLimitInfo.requestCount > 20) {
                     call.respond(
                         HttpStatusCode.TooManyRequests,
                         mapOf("Response" to "Too many requests, rate limit exceeded"),
@@ -51,3 +52,4 @@ fun Application.configureRateLimiting() {
         }
     }
 }
+//

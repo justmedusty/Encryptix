@@ -17,11 +17,7 @@ fun Application.configureSecurity() {
         jwt("jwt") {
             realm = jwtRealm
             verifier(
-                JWT
-                    .require(Algorithm.HMAC256(jwtSecret))
-                    .withAudience(jwtAudience)
-                    .withIssuer(jwtDomain)
-                    .build(),
+                JWT.require(Algorithm.HMAC256(jwtSecret)).withAudience(jwtAudience).withIssuer(jwtDomain).build(),
             )
             validate { credential ->
                 if (credential.payload.audience.contains(jwtAudience)) JWTPrincipal(credential.payload) else null
@@ -33,15 +29,11 @@ fun Application.configureSecurity() {
         basic(name = "basic") {
             realm = "Ktor Server"
             validate { credentials ->
-                if (verifyCredentials(credentials.name, credentials.password)) UserIdPrincipal(credentials.name) else null
-            }
-        }
-
-        form(name = "myauth2") {
-            userParamName = "user"
-            passwordParamName = "password"
-            challenge {
-                /**/
+                if (verifyCredentials(
+                        credentials.name,
+                        credentials.password
+                    )
+                ) UserIdPrincipal(credentials.name) else null
             }
         }
     }
