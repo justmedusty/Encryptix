@@ -33,7 +33,6 @@ fun Application.module() {
     configureUsernameFetching()
     install(CORS) {
         allowMethod(HttpMethod.Options)
-        //allowMethod(HttpMethod.Options)
         allowMethod(HttpMethod.Post)
         allowMethod(HttpMethod.Get)
         allowMethod(HttpMethod.Delete)
@@ -46,7 +45,6 @@ fun Application.module() {
         allowHeader(HttpHeaders.AccessControlAllowOrigin)
         allowSameOrigin = true
         allowNonSimpleContentTypes = true
-        //header(HttpHeaders.AccessControlAllowHeaders,"*")
         allowCredentials = true
         anyHost()
 

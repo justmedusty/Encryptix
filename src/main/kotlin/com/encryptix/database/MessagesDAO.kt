@@ -17,7 +17,7 @@ val logger = KotlinLogging.logger { }
 object Messages : Table(name = "Messages") {
     private val id: Column<Int> = integer("id").autoIncrement()
     val senderId: Column<Int> = integer("sender_id") references Users.id
-    val receiverId: Column<Int> = integer("receiver_id") references Users.id
+    val receiverId: Column<Int> = integer("receiver_id").references(Users.id, onDelete = ReferenceOption.CASCADE)
     val encryptedMessage: Column<ExposedBlob> = blob("encrypted_message")
     val timeSent: Column<LocalDateTime> = datetime("time_sent").defaultExpression(CurrentDateTime)
 
