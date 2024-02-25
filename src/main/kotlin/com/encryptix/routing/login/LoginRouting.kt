@@ -45,17 +45,15 @@ fun Application.configureLogin() {
             post("/app/login") {
                 val principal = call.principal<UserIdPrincipal>() ?: error("Invalid credentials")
                 val userName = principal.name
-                val token = (
-                    createJWT(
-                        JWTConfig(
-                            "encryptix-user",
-                            "https://jwt-provider-domain/",
-                            System.getenv("JWT_SECRET"),
-                            getUserId(userName),
-                            700000,
-                        ),
-                    )
-                    )
+                val token = (createJWT(
+                    JWTConfig(
+                        "encryptix-user",
+                        "https://jwt-provider-domain/",
+                        System.getenv("JWT_SECRET"),
+                        getUserId(userName),
+                        700000,
+                    ),
+                ))
                 call.respond(mapOf("access_token" to token))
             }
 
@@ -65,11 +63,19 @@ fun Application.configureLogin() {
             val user = User(signup.userName, null.toString(), signup.password)
             when {
                 user.userName.length < 6 || user.userName.length > 45 -> {
-                    call.respond(HttpStatusCode.Conflict, mapOf("Response" to "Username must be between 6 and 45 characters"))
+                    call.respond(
+                        HttpStatusCode.Conflict,
+                        mapOf("Response" to "Username must be between 6 and 45 characters")
+                    )
                 }
+
                 userNameAlreadyExists(signup.userName) -> {
-                    call.respond(HttpStatusCode.Conflict, mapOf("Response" to "This username is taken, please try another"))
+                    call.respond(
+                        HttpStatusCode.Conflict,
+                        mapOf("Response" to "This username is taken, please try another")
+                    )
                 }
+
                 else -> {
                     createUser(user)
                     call.respond(HttpStatusCode.OK, mapOf("Response" to "Successfully created your account"))

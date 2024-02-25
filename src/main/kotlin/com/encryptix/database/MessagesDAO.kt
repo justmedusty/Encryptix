@@ -10,7 +10,7 @@ import org.jetbrains.exposed.sql.statements.api.ExposedBlob
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.nio.charset.StandardCharsets
 import java.time.LocalDateTime
-import java.util.Base64
+import java.util.*
 
 val logger = KotlinLogging.logger { }
 
@@ -73,16 +73,15 @@ fun getAllUserMessages(id: Int, page: Int, limit: Int): List<Message> {
     val offset = (page - 1) * limit
     return try {
         transaction {
-            Messages.select(Messages.receiverId eq id)
-                .limit(limit, offset.toLong())
-                .orderBy(Messages.timeSent, SortOrder.DESC)
-                .map {
+            Messages.select(Messages.receiverId eq id).limit(limit, offset.toLong())
+                .orderBy(Messages.timeSent, SortOrder.DESC).map {
                     val senderUsername: String = it[Messages.senderId].toString()
                     val receiverUserName: String = it[Messages.receiverId].toString()
 
                     // Decode Base64 to String
-                    val base64EncodedMessage: ByteArray = it[Messages.encryptedMessage].bytes
-                    val decodedMessage: String = Base64.getDecoder().decode(base64EncodedMessage).toString(StandardCharsets.UTF_8)
+                    val base64EncodedMessage: ByteArray = it[encryptedMessage].bytes
+                    val decodedMessage: String =
+                        Base64.getDecoder().decode(base64EncodedMessage).toString(StandardCharsets.UTF_8)
 
                     val timeSent: LocalDateTime = it[Messages.timeSent]
                     Message(
@@ -106,10 +105,7 @@ fun getUserMessagesByUserName(id: Int, senderUserName: String, page: Int, limit:
         transaction {
             Messages.select {
                 (Messages.receiverId eq id) and (Messages.senderId eq senderId)
-            }
-                .limit(page, offset.toLong())
-                .orderBy(Messages.timeSent, SortOrder.DESC)
-                .map {
+            }.limit(page, offset.toLong()).orderBy(Messages.timeSent, SortOrder.DESC).map {
                     val senderUsername: String = it[Messages.senderId].toString()
                     val receiverUserName: String = it[Messages.receiverId].toString()
                     val encryptedMessage: ByteArray = it[encryptedMessage].bytes

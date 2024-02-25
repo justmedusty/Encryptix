@@ -30,8 +30,7 @@ fun Application.configureSecurity() {
             realm = "Ktor Server"
             validate { credentials ->
                 if (verifyCredentials(
-                        credentials.name,
-                        credentials.password
+                        credentials.name, credentials.password
                     )
                 ) UserIdPrincipal(credentials.name) else null
             }

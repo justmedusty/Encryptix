@@ -9,8 +9,6 @@ import org.pgpainless.encryption_signing.EncryptionStream
 import org.pgpainless.encryption_signing.ProducerOptions
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
-import java.io.File
-import java.io.FileOutputStream
 import java.util.*
 
 /**
@@ -27,15 +25,12 @@ fun encryptMessage(publicKey: String, message: String): ByteArray {
     val publicKeyObj: PGPPublicKeyRing = PGPainless.readKeyRing().publicKeyRing(publicKey)!!
     val plaintextInputStream = ByteArrayInputStream(message.toByteArray())
 
-    val encryptionStream: EncryptionStream = PGPainless.encryptAndOrSign()
-        .onOutputStream(outputStream)
-        .withOptions(
+    val encryptionStream: EncryptionStream = PGPainless.encryptAndOrSign().onOutputStream(outputStream).withOptions(
             ProducerOptions.encrypt(
-                EncryptionOptions()
-                    .addRecipient(publicKeyObj)
+                EncryptionOptions().addRecipient(publicKeyObj)
                     .overrideEncryptionAlgorithm(SymmetricKeyAlgorithm.AES_192),
 
-            ).setAsciiArmor(true), // Ascii armor or not
+                ).setAsciiArmor(true), // Ascii armor or not
         )
 
     Streams.pipeAll(plaintextInputStream, encryptionStream)
