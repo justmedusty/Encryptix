@@ -51,7 +51,7 @@ fun Application.configureLogin() {
                         "https://jwt-provider-domain/",
                         System.getenv("JWT_SECRET"),
                         getUserId(userName),
-                        700000,
+                        900000,
                     ),
                 ))
                 call.respond(mapOf("access_token" to token))
