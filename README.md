@@ -1,4 +1,5 @@
 # Encryptix
+# Check it out live! Links are available here : http://6v4gddjepi6gu6khtkheqkniza2p2u6lsmwa5acod4xq5jh3dkdyevad.onion/
 This will be the backend for my messaging service where users may create accounts with a unique username and a password,
 once the user logs in they are able to change account information and more importantly they are able to upload a public key (must be unique),
 once their public key has been uploaded other  users are able to send that user messages which will be recieved in the form of binary 
